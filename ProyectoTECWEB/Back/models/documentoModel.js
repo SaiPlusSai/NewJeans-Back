@@ -10,35 +10,36 @@ export async function crearDocumento(data) {
     relevancia,
     anio,
     enlace,
-    alcance_id,
+    aplicacion_id,
     conceptos_cpe,
-    categoria_id,
+    jerarquia,
     creado_por
   } = data;
 
   const sql = `
     INSERT INTO documentos (
       codigo, tipo, fuente, descripcion, relevancia,
-      anio, enlace, alcance_id, conceptos_cpe, categoria_id, creado_por
+      anio, enlace, aplicacion_id, conceptos_cpe,
+      jerarquia, vigente, creado_por
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE, ?)
   `;
 
   await db.query(sql, [
     codigo, tipo, fuente, descripcion, relevancia,
-    anio, enlace, alcance_id, conceptos_cpe, categoria_id, creado_por
+    anio, enlace, aplicacion_id, conceptos_cpe,
+    jerarquia, creado_por
   ]);
 }
 
-// Listar todos los documentos no eliminados
+// Listar todos los documentos vigentes
 export async function listarDocumentos() {
   const [rows] = await db.query(`
-    SELECT d.*, a.tipo AS alcance, c.nombre AS categoria, u.nombres AS creado_por_nombre
+    SELECT d.*, a.tipo AS aplicacion, u.nombres AS creado_por_nombre
     FROM documentos d
-    JOIN alcance a ON d.alcance_id = a.id
-    JOIN categorias c ON d.categoria_id = c.id
+    JOIN aplicacion a ON d.aplicacion_id = a.id
     JOIN usuarios u ON d.creado_por = u.id
-    WHERE d.eliminado = FALSE
+    WHERE d.vigente = TRUE
     ORDER BY d.anio DESC
   `);
   return rows;
@@ -50,47 +51,37 @@ export async function buscarDocumentoPorCodigo(codigo) {
   return rows[0];
 }
 
-// Editar documento (excepto código y fuente)
+// Editar documento
 export async function editarDocumento(codigo, data) {
   const {
     descripcion,
     relevancia,
     anio,
     enlace,
-    alcance_id,
+    aplicacion_id,
     conceptos_cpe,
-    categoria_id
+    jerarquia
   } = data;
 
   const sql = `
     UPDATE documentos
     SET descripcion = ?, relevancia = ?, anio = ?, enlace = ?,
-        alcance_id = ?, conceptos_cpe = ?, categoria_id = ?
+        aplicacion_id = ?, conceptos_cpe = ?, jerarquia = ?
     WHERE codigo = ?
   `;
 
   await db.query(sql, [
     descripcion, relevancia, anio, enlace,
-    alcance_id, conceptos_cpe, categoria_id, codigo
+    aplicacion_id, conceptos_cpe, jerarquia, codigo
   ]);
 }
 
-// Eliminación lógica
-export async function eliminarDocumento(codigo) {
-  const sql = `
-    UPDATE documentos
-    SET eliminado = TRUE
-    WHERE codigo = ?
-  `;
-  await db.query(sql, [codigo]);
+// Marcar como no vigente
+export async function marcarNoVigente(codigo) {
+  await db.query('UPDATE documentos SET vigente = FALSE WHERE codigo = ?', [codigo]);
 }
 
-// Restaurar documento eliminado
+// Restaurar
 export async function restaurarDocumento(codigo) {
-  const sql = `
-    UPDATE documentos
-    SET eliminado = FALSE
-    WHERE codigo = ?
-  `;
-  await db.query(sql, [codigo]);
+  await db.query('UPDATE documentos SET vigente = TRUE WHERE codigo = ?', [codigo]);
 }
