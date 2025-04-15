@@ -1,15 +1,11 @@
 import express from 'express';
-import { login } from '../controllers/usuariosController.js';
+import { login, register, perfil } from '../controllers/usuariosController.js';
 import { verificarToken } from '../middleware/auth.js';
-import { soloMIGA } from '../middleware/validarRol.js';
 
 const router = express.Router();
 
+router.post('/register', register);
 router.post('/login', login);
-
-// Ruta de prueba protegida
-router.get('/protegido', verificarToken, soloMIGA, (req, res) => {
-  res.json({ mensaje: 'Acceso correcto como MIGA', usuario: req.usuario });
-});
+router.get('/perfil', verificarToken, perfil);
 
 export default router;

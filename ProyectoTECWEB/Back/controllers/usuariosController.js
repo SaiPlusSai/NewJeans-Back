@@ -1,35 +1,64 @@
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { buscarUsuarioPorCorreo } from '../models/usuariosModel.js';
+import bcrypt from 'bcryptjs';
+import { crearUsuario, buscarPorCorreo } from '../models/usuariosModel.js';
+
+export async function register(req, res) {
+  try {
+    const { nombres, apellidop, apellidom, correo, contraseña, rol } = req.body;
+
+    if (!nombres || !correo || !contraseña || !rol) {
+      return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
+    }
+
+    const usuarioExistente = await buscarPorCorreo(correo);
+    if (usuarioExistente) return res.status(400).json({ mensaje: 'Correo ya registrado' });
+
+    const hash = await bcrypt.hash(contraseña, 10);
+
+    await crearUsuario({ nombres, apellidop, apellidom, correo, contraseña: hash, rol });
+
+    res.status(201).json({ mensaje: `Usuario ${rol} creado correctamente` });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al registrar usuario' });
+  }
+}
 
 export async function login(req, res) {
-  const { correo, contraseña } = req.body;
+  try {
+    const { correo, contraseña } = req.body;
+    const usuario = await buscarPorCorreo(correo);
 
-  if (!correo || !contraseña) {
-    return res.status(400).json({ mensaje: 'Faltan datos' });
+    if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+
+    const match = await bcrypt.compare(contraseña, usuario.contraseña);
+    if (!match) return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+
+    const token = jwt.sign({ id: usuario.id, rol: usuario.rol }, process.env.JWT_SECRET, {
+      expiresIn: '4h'
+    });
+
+    res.json({
+      mensaje: 'Login exitoso',
+      token,
+      usuario: {
+        id: usuario.id,
+        nombres: usuario.nombres,
+        apellidop: usuario.apellidop,
+        apellidom: usuario.apellidom,
+        rol: usuario.rol
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al iniciar sesión' });
   }
+}
 
-  const usuario = await buscarUsuarioPorCorreo(correo);
-  if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
-
-  const match = await bcrypt.compare(contraseña, usuario.contraseña);
-  if (!match) return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
-
-  const token = jwt.sign(
-    { id: usuario.id, rol: usuario.rol },
-    process.env.JWT_SECRET,
-    { expiresIn: '4h' }
-  );
-
+export function perfil(req, res) {
   res.json({
-    mensaje: 'Login exitoso',
-    token,
-    usuario: {
-      id: usuario.id,
-      nombres: usuario.nombres,
-      apellidop: usuario.apellidop,
-      apellidom: usuario.apellidom,
-      rol: usuario.rol
-    }
+    mensaje: 'Token válido',
+    usuario: req.usuario
   });
 }
