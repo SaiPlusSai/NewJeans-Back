@@ -6,9 +6,8 @@
  */
 
 import express from 'express';
-import { login } from '../controllers/usuariosController.js';
+import { login, register, perfil } from '../controllers/usuariosController.js';
 import { verificarToken } from '../middleware/auth.js';
-import { soloMIGA } from '../middleware/validarRol.js';
 
 const router = express.Router();
 
@@ -45,7 +44,9 @@ const router = express.Router();
  *       500:
  *         description: Error en el servidor.
  */
+router.post('/register', register);
 router.post('/login', login);
+router.get('/perfil', verificarToken, perfil);
 
 /**
  * @swagger
@@ -68,4 +69,3 @@ router.get('/protegido', verificarToken, soloMIGA, (req, res) => {
 });
 
 export default router;
-
