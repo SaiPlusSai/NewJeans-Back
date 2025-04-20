@@ -41,19 +41,32 @@ const router = express.Router();
  *                 type: string
  *               enlace:
  *                 type: string
- *               alcance_id:
+ *               aplicacion_id:
  *                 type: integer
  *               conceptos_cpe:
  *                 type: string
- *               categoria_id:
+ *               creado_por:
  *                 type: integer
+ *               jerarquia:
+ *                 type: integer
+ *               vigente:
+ *                 type: boolean
+ *               aplicacion:
+ *                 type: string
+ *               vigente:
+ *                 type: boolean
  *     responses:
  *       201:
  *         description: Documento registrado exitosamente
+ *      400:
+ *        description: Datos de entrada inválidos
+ *      500:
+ *        description: Error en el servidor
+ *      401:
+ *        description: No autorizado
+ * *    403:
+ *         description: Prohibido
  */
-
-//registrar documento (solo MIGA)
-router.post('/', verificarToken, soloMIGA, registrarDocumento);
 /**
  * @swagger
  * /api/documentos:

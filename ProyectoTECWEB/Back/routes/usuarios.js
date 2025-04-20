@@ -13,6 +13,49 @@ const router = express.Router();
 
 /**
  * @swagger
+ * /api/usuarios/register:
+ *   post:
+ *     summary: Registrar un nuevo usuario
+ *     description: Crea una nueva cuenta de usuario.
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombres
+ *               - apellidop
+ *               - apellidom  
+ *               - correo
+ *               - contraseña
+ *               - rol
+ *             properties:
+ *               nombres:
+ *                 type: string
+ *               apellidop:
+ *                 type: string
+ *               apellidom:
+ *                 type: string
+ *               correo:
+ *                 type: string
+ *               contraseña:
+ *                 type: string
+ *               rol:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Usuario registrado exitosamente.
+ *       400:
+ *         description: Datos de entrada inválidos o usuario ya existe.
+ *       500:
+ *         description: Error en el servidor.
+ */
+router.post('/register', register);
+
+/**
+ * @swagger
  * /api/usuarios/login:
  *   post:
  *     summary: Iniciar sesión
@@ -24,6 +67,9 @@ const router = express.Router();
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - correo
+ *               - contraseña
  *             properties:
  *               correo:
  *                 type: string
@@ -44,28 +90,48 @@ const router = express.Router();
  *       500:
  *         description: Error en el servidor.
  */
-router.post('/register', register);
 router.post('/login', login);
-router.get('/perfil', verificarToken, perfil);
 
 /**
  * @swagger
- * /api/usuarios/protegido:
+ * /api/usuarios/perfil:
  *   get:
- *     summary: Ruta protegida solo para usuarios MIGA
+ *     summary: Obtener perfil del usuario
+ *     description: Obtiene la información del perfil del usuario autenticado.
  *     tags: [Usuarios]
  *     security:
- *       - bearerAuth: []  # Indica que esta ruta requiere el token
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Acceso correcto
- *       403:
- *         description: Acceso denegado
+ *         description: Perfil del usuario obtenido exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 nombre:
+ *                   type: string
+ *                 correo:
+ *                   type: string
  *       401:
- *         description: Token no proporcionado o inválido
+ *         description: No autorizado, token inválido o no proporcionado.
+ *       404:
+ *         description: Usuario no encontrado.
+ *       500:
+ *         description: Error en el servidor.
  */
-router.get('/protegido', verificarToken, soloMIGA, (req, res) => {
-  res.json({ mensaje: 'Acceso correcto como MIGA', usuario: req.usuario });
-});
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+router.get('/perfil', verificarToken, perfil);
 
 export default router;
