@@ -53,20 +53,19 @@ const router = express.Router();
  *                 type: boolean
  *               aplicacion:
  *                 type: string
- *               vigente:
- *                 type: boolean
  *     responses:
  *       201:
  *         description: Documento registrado exitosamente
- *      400:
- *        description: Datos de entrada inválidos
- *      500:
- *        description: Error en el servidor
- *      401:
- *        description: No autorizado
- * *    403:
+ *       400:
+ *         description: Datos de entrada inválidos
+ *       500:
+ *         description: Error en el servidor
+ *       401:
+ *         description: No autorizado
+ *       403:
  *         description: Prohibido
  */
+
 /**
  * @swagger
  * /api/documentos:
