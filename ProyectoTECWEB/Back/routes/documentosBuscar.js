@@ -35,6 +35,18 @@ const router = express.Router();
  *         description: Búsqueda parcial en el nombre de la fuente
  * 
  *       - in: query
+ *         name: descripcion
+ *         schema:
+ *           type: string
+ *         description: Búsqueda de palabras en la descripción del documento
+ * 
+ *       - in: query
+ *         name: relevancia
+ *         schema:
+ *           type: string
+ *         description: Búsqueda de palabras en el campo de relevancia
+ * 
+ *       - in: query
  *         name: anio
  *         schema:
  *           type: integer
@@ -42,26 +54,7 @@ const router = express.Router();
  *           minimum: 2000
  *           maximum: 2024
  *         description: Año de publicación del documento
- * 
- *       - in: query
- *         name: aplicacion
- *         schema:
- *           type: integer
- *         description: Ámbito de aplicación del documento
- * 
- *       - in: query
- *         name: jerarquia
- *         schema:
- *           type: enum
- *           enum: [Suprema, Alta, Media alta, Media, Media Baja, Baja]
- *         example: "Media"
- *         description: Nivel de jerarquía/importancia del documento
- * 
- *       - in: query
- *         name: vigente
- *         schema:
- *           type: tinyint
- *         description: Filtrar solo documentos vigentes
+ *      
  * 
  *     responses:
  *       200:
