@@ -6,13 +6,14 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Documentos Buscar
- *   description: Operaciones relacionadas con búsquedas en el historial
+ *   description: Operaciones relacionadas con búsquedas filtradas por tipo, año, fuente, etc.
+ * 
  * /api/buscar:
  *   get:
  *     summary: Buscar documentos con múltiples filtros
  *     description: |
- *       Permite buscar documentos usando diversos criterios como código, tipo, fuente,
- *       descripción, año, etc. Todos los parámetros son combinables.
+ *       Permite buscar documentos usando diversos criterios como código, tipo, fuente y año.
+ *       Todos los parámetros son combinables.
  *     tags: [Documentos Buscar]
  *     parameters:
  *       - in: query
@@ -24,7 +25,7 @@ const router = express.Router();
  *       - in: query
  *         name: tipo
  *         schema:
- *           type: enum
+ *           type: string
  *           enum: [ley, decreto, resolucion, circular, reglamento, otro]
  *         description: Tipo de documento (valores predefinidos)
  * 
@@ -35,18 +36,6 @@ const router = express.Router();
  *         description: Búsqueda parcial en el nombre de la fuente
  * 
  *       - in: query
- *         name: descripcion
- *         schema:
- *           type: string
- *         description: Búsqueda de palabras en la descripción del documento
- * 
- *       - in: query
- *         name: relevancia
- *         schema:
- *           type: string
- *         description: Búsqueda de palabras en el campo de relevancia
- * 
- *       - in: query
  *         name: anio
  *         schema:
  *           type: integer
@@ -54,7 +43,6 @@ const router = express.Router();
  *           minimum: 2000
  *           maximum: 2024
  *         description: Año de publicación del documento
- *      
  * 
  *     responses:
  *       200:
@@ -70,7 +58,6 @@ const router = express.Router();
  *                     $ref: '#/components/schemas/Documento'
  *                 meta:
  *                   $ref: '#/components/schemas/Paginacion'
- * 
  *       400:
  *         description: Error en los parámetros de búsqueda
  *         content:
@@ -88,16 +75,10 @@ const router = express.Router();
  *           example: "DOC006"
  *         tipo:
  *           type: string
- *           example: ""
+ *           example: "ley"
  *         fuente:
  *           type: string
- *           example: "Programa Nacional de Alimentación Escolar"
- *         descripcion:
- *           type: string
- *           example: "Aplica estrategias nutricionales en entornos educativos."
- *         relevancia:
- *           type: string
- *           example: "Artículo 6 fomenta la distribución de alimentos saludables."
+ *           example: "Ministerio de Educación"
  *         anio:
  *           type: integer
  *           example: 2024
@@ -110,19 +91,19 @@ const router = express.Router();
  *           example: 3
  *         conceptos_cpe:
  *           type: string
- *           example: "El derecho a la salud y a la alimentación está garantizado por la CPE."
+ *           example: "Derecho a la salud y a la alimentación"
  *         jerarquia:
  *           type: string
- *           example: "Media"
+ *           example: "Alta"
  *         vigente:
  *           type: boolean
  *           example: true
  *         aplicacion:
  *           type: string
- *           example: "Municipal"
+ *           example: "Nacional"
  *         creado_por_nombre:
  *           type: string
- *           example: "Admin"
+ *           example: "Administrador"
  * 
  *     Paginacion:
  *       type: object
@@ -155,6 +136,6 @@ const router = express.Router();
  *             type: string
  *           example: ["El parámetro 'anio' debe estar entre 2000 y 2024"]
  */
-router.get('/', buscarDocumentos);
 
+router.get('/', buscarDocumentos);
 export default router;
