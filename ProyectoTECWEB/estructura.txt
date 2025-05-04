@@ -7,6 +7,8 @@
 |   |   |-- documentosController.js
 |   |   |-- documentosFiltradoController.js
 |   |   |-- historialBuscarController.js
+|   |   |-- reportesController.js
+|   |   |-- reportesPDFController.js
 |   |   `-- usuariosController.js
 |   |-- db.js
 |   |-- middleware
@@ -17,6 +19,7 @@
 |   |   |-- documentosBuscarModel.js
 |   |   |-- documentosFiltradoModel.js
 |   |   |-- historialBuscarModel.js
+|   |   |-- reporteModel.js
 |   |   `-- usuariosModel.js
 |   |-- package-lock.json
 |   |-- package.json
@@ -25,12 +28,21 @@
 |   |   |-- documentosBuscar.js
 |   |   |-- documentosFiltrado.js
 |   |   |-- historialBuscar.js
+|   |   |-- reportes.js
+|   |   |-- reportesPDF.js
 |   |   `-- usuarios.js
 |   |-- server.js
 |   |-- services
+|   |   `-- puppeteerService.js
 |   |-- swagger.js
+|   |-- templates
+|   |   |-- reporteConsultas.ejs
+|   |   |-- reporteDocumentos.ejs
+|   |   |-- reportePorAnio.ejs
+|   |   `-- reportePorTipo.ejs
 |   `-- utils
 |       `-- analisisTexto.js
+|-- dependencias.txt
 `-- estructura.txt
 
-7 directories, 26 files
+8 directories, 37 files
