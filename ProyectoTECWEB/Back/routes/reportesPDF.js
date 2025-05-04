@@ -10,23 +10,22 @@ const tiposValidos = [
   'ley', 'decreto', 'resolucion', 'plan', 'norma',
   'resolucion_municipal', 'programa', 'otro'
 ];
+// routes/reportesPDF.js
+router.get('/documentos', verificarToken, validarRol('MIGA'), reportesPDFController.getPDFDocumentos);
 
-router.get('/pdf/documentos', verificarToken, validarRol('MIGA'), reportesPDFController.getPDFDocumentos);
-
-router.get('/pdf/documentos/tipo/:tipo',
+router.get('/documentos/tipo/:tipo',
   verificarToken,
   validarRol('MIGA'),
   param('tipo').isIn(tiposValidos),
   reportesPDFController.getPDFDocumentosPorTipo
 );
 
-router.get('/pdf/documentos/anio/:anio',
+router.get('/documentos/anio/:anio',
   verificarToken,
   validarRol('MIGA'),
   param('anio').isInt({ min: 1900, max: 2100 }),
   reportesPDFController.getPDFDocumentosPorAnio
 );
 
-router.get('/pdf/consultas', verificarToken, validarRol('MIGA'), reportesPDFController.getPDFConsultas);
-
+router.get('/consultas', verificarToken, validarRol('MIGA'), reportesPDFController.getPDFConsultas);
 export default router;

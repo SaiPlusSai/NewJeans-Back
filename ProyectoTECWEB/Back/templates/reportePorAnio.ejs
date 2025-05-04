@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Reporte por Año</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; }
+    h1 { text-align: center; color: #2c3e50; }
+    .doc { margin-bottom: 25px; border-bottom: 1px solid #ccc; padding-bottom: 15px; }
+    .codigo { font-weight: bold; color: #1a5276; font-size: 16px; }
+    .meta, .detalle { font-size: 14px; color: #444; margin: 3px 0; }
+    .label { font-weight: bold; color: #2c3e50; }
+  </style>
+</head>
+<body>
+  <h1>📄 Reporte de Documentos por Año</h1>
+
+  <% documentos.forEach(doc => { %>
+    <div class="doc">
+      <p class="codigo">📘 Código: <%= doc.codigo %></p>
+      <p class="meta">📂 Tipo: <%= doc.tipo %> | 🗓 Año: <%= doc.anio %> | 🌍 Aplicación: <%= doc.aplicacion %></p>
+      <p class="detalle"><span class="label">Fuente:</span> <%= doc.fuente %></p>
+      <p class="detalle"><span class="label">Descripción:</span> <%= doc.descripcion %></p>
+      <p class="detalle"><span class="label">Relevancia:</span> <%= doc.relevancia %></p>
+      <p class="detalle"><span class="label">Conceptos CPE:</span> <%= doc.conceptos_cpe %></p>
+      <p class="detalle"><span class="label">Jerarquía:</span> <%= doc.jerarquia %></p>
+      <p class="detalle"><span class="label">Enlace:</span> <%= doc.enlace %></p>
+      <p class="detalle"><span class="label">Creado por (ID):</span> <%= doc.creado_por %></p>
+      <p class="detalle"><span class="label">Vigente:</span> <%= doc.vigente ? 'Sí' : 'No' %></p>
+    </div>
+  <% }) %>
+
+  <hr />
+  <p style="text-align: center;">📅 Generado por MIGA • <%= new Date().toLocaleDateString() %></p>
+</body>
+</html>
