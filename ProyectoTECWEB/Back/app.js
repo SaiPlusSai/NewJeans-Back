@@ -7,7 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import documentosBuscarRoutes from './routes/documentosBuscar.js';
 import documentosFiltradoRoutes from './routes/documentosFiltrado.js';
 import historialBuscarRoutes from './routes/historialBuscar.js';
-const reportesRoutes = require('./routes/reportes');
+import reportesRoutes from './routes/reportes.js';
 
 
 const app = express();

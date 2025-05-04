@@ -1,5 +1,4 @@
-// models/reporteModel.js
-const db = require('../db');
+import db from '../db.js'; // 👈 asegúrate que también uses ESM en `db.js`
 
 const reporteModel = {
   getHistorialConsultas: async () => {
@@ -42,4 +41,4 @@ const reporteModel = {
   }
 };
 
-module.exports = reporteModel;
+export default reporteModel;

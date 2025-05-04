@@ -1,6 +1,5 @@
-// controllers/reportesController.js
-const { validationResult } = require('express-validator');
-const reporteModel = require('../models/reporteModel');
+import { validationResult } from 'express-validator';
+import reporteModel from '../models/reporteModel.js'; // Asegúrate de que tu modelo use `export default`
 
 const reportesController = {
   getConsultas: async (req, res) => {
@@ -52,4 +51,4 @@ const reportesController = {
   }
 };
 
-module.exports = reportesController;
+export default reportesController;
