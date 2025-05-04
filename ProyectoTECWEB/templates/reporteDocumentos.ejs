@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Reporte de Documentos</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; }
+    h1 { text-align: center; color: #2c3e50; }
+    .doc { margin-bottom: 25px; border-bottom: 1px solid #ccc; padding-bottom: 15px; }
+    .codigo { font-weight: bold; color: #1a5276; }
+    .meta { font-size: 14px; color: #555; }
+  </style>
+</head>
+<body>
+  <h1>📄 Reporte de Documentos Vigentes</h1>
+  <% documentos.forEach(doc => { %>
+    <div class="doc">
+      <p class="codigo">Código: <%= doc.codigo %></p>
+      <p class="meta">Tipo: <%= doc.tipo %> | Año: <%= doc.anio %> | Aplicación: <%= doc.aplicacion %></p>
+      <p><strong>Descripción:</strong> <%= doc.descripcion %></p>
+    </div>
+  <% }) %>
+  <hr />
+  <p style="text-align: center;">📅 Generado por MIGA • <%= new Date().toLocaleDateString() %></p>
+</body>
+</html>

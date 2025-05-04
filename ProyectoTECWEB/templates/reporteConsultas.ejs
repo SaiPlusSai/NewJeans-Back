@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Reporte de Consultas</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; }
+    h1 { text-align: center; color: #2c3e50; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Historial de Búsquedas</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Palabra</th>
+        <th>Campo</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% consultas.forEach(c => { %>
+        <tr>
+          <td><%= c.palabra %></td>
+          <td><%= c.buscado_donde %></td>
+          <td><%= new Date(c.buscado_en).toLocaleString() %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>
