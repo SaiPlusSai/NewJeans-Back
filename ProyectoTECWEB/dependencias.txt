@@ -1,0 +1,21 @@
+# 🔧 Servidor y configuración básica
+npm install express
+npm install cors
+
+# 🔒 Autenticación y seguridad
+npm install jsonwebtoken
+npm install bcryptjs
+
+# ✅ Validaciones
+npm install express-validator
+
+# 🗃️ Conexión a base de datos MySQL
+npm install mysql2
+
+# 📚 Documentación Swagger
+npm install swagger-ui-express
+npm install swagger-jsdoc
+
+# 🖨️ Generación de PDFs con diseño profesional
+npm install puppeteer
+npm install ejs
