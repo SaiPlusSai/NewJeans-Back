@@ -1,0 +1,36 @@
+.
+|-- Back
+|   |-- app.js
+|   |-- cifrar.js
+|   |-- controllers
+|   |   |-- documentosBuscarController.js
+|   |   |-- documentosController.js
+|   |   |-- documentosFiltradoController.js
+|   |   |-- historialBuscarController.js
+|   |   `-- usuariosController.js
+|   |-- db.js
+|   |-- middleware
+|   |   |-- auth.js
+|   |   `-- validarRol.js
+|   |-- models
+|   |   |-- documentoModel.js
+|   |   |-- documentosBuscarModel.js
+|   |   |-- documentosFiltradoModel.js
+|   |   |-- historialBuscarModel.js
+|   |   `-- usuariosModel.js
+|   |-- package-lock.json
+|   |-- package.json
+|   |-- routes
+|   |   |-- documentos.js
+|   |   |-- documentosBuscar.js
+|   |   |-- documentosFiltrado.js
+|   |   |-- historialBuscar.js
+|   |   `-- usuarios.js
+|   |-- server.js
+|   |-- services
+|   |-- swagger.js
+|   `-- utils
+|       `-- analisisTexto.js
+`-- estructura.txt
+
+7 directories, 26 files

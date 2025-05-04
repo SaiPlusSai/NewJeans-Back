@@ -7,6 +7,8 @@ import swaggerUi from 'swagger-ui-express';
 import documentosBuscarRoutes from './routes/documentosBuscar.js';
 import documentosFiltradoRoutes from './routes/documentosFiltrado.js';
 import historialBuscarRoutes from './routes/historialBuscar.js';
+const reportesRoutes = require('./routes/reportes');
+
 
 const app = express();
 
@@ -18,6 +20,7 @@ app.use('/api/filtrado', documentosFiltradoRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/documentos', documentosRoutes);
 app.use('/api/buscar', documentosBuscarRoutes);
+app.use('/api/reportes', reportesRoutes);
 export default app;
 
 // Servir la documentación de Swagger en una ruta
