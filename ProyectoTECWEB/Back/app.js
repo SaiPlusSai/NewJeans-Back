@@ -10,7 +10,8 @@ import historialBuscarRoutes from './routes/historialBuscar.js';
 import reportesRoutes from './routes/reportes.js';
 import reportesPDFRoutes from './routes/reportesPDF.js';
 import favoritosRoutes from './routes/favoritos.js';
-
+import propuestasRoutes from './routes/propuestas.js';
+import propuestasPublicasRoutes from './routes/propuestasPublicas.js';
 const app = express();
 
 
@@ -24,8 +25,8 @@ app.use('/api/buscar', documentosBuscarRoutes);
 app.use('/api/reportes', reportesRoutes);
 app.use('/api/reportes/pdf', reportesPDFRoutes);
 app.use('/api/favoritos', favoritosRoutes);
-
-
+app.use('/api/propuestas', propuestasRoutes);
+app.use('/api/propuestas/publicas', propuestasPublicasRoutes);
 export default app;
 
 // Servir la documentación de Swagger en una ruta
