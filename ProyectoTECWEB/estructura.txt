@@ -6,7 +6,11 @@
 |   |   |-- documentosBuscarController.js
 |   |   |-- documentosController.js
 |   |   |-- documentosFiltradoController.js
+|   |   |-- favoritosController.js
 |   |   |-- historialBuscarController.js
+|   |   |-- informacionController.js
+|   |   |-- propuestasController.js
+|   |   |-- propuestasPublicasController.js
 |   |   |-- reportesController.js
 |   |   |-- reportesPDFController.js
 |   |   `-- usuariosController.js
@@ -18,7 +22,10 @@
 |   |   |-- documentoModel.js
 |   |   |-- documentosBuscarModel.js
 |   |   |-- documentosFiltradoModel.js
+|   |   |-- favoritosModel.js
 |   |   |-- historialBuscarModel.js
+|   |   |-- informacionModel.js
+|   |   |-- propuestaModel.js
 |   |   |-- reporteModel.js
 |   |   `-- usuariosModel.js
 |   |-- package-lock.json
@@ -27,7 +34,11 @@
 |   |   |-- documentos.js
 |   |   |-- documentosBuscar.js
 |   |   |-- documentosFiltrado.js
+|   |   |-- favoritos.js
 |   |   |-- historialBuscar.js
+|   |   |-- informacion.js
+|   |   |-- propuestas.js
+|   |   |-- propuestasPublicas.js
 |   |   |-- reportes.js
 |   |   |-- reportesPDF.js
 |   |   `-- usuarios.js
@@ -45,4 +56,4 @@
 |-- dependencias.txt
 `-- estructura.txt
 
-8 directories, 37 files
+8 directories, 48 files
