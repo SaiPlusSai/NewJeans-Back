@@ -1,4 +1,4 @@
-import snowball from 'snowball-stemmers';
+import { newStemmer } from 'snowball-stemmers';
 
 const stopwords = [
   'para', 'con', 'esta', 'este', 'desde', 'donde', 'sobre', 'entre',
@@ -17,7 +17,7 @@ export async function obtenerPalabrasFrecuentes(db) {
     `SELECT descripcion, relevancia FROM documentos WHERE vigente = TRUE`
   );
 
-  const stemmer = snowball.newStemmer('spanish'); // 💥 esta es la clave
+  const stemmer = newStemmer('spanish'); // 💥 ahora sí funciona
   const conteo = {};
 
   rows.forEach(row => {
@@ -33,10 +33,8 @@ export async function obtenerPalabrasFrecuentes(db) {
     });
   });
 
-  const resultado = Object.entries(conteo)
+  return Object.entries(conteo)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 20)
     .map(([palabra, cantidad]) => ({ palabra, cantidad }));
-
-  return resultado;
 }
