@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/propuestas-publicas:
+ * /api/propuestas/publicas:
  *   get:
  *     summary: Listar todas las propuestas públicas visibles
  *     tags: [Propuestas Públicas]
@@ -28,16 +28,21 @@ const router = express.Router();
  *                 properties:
  *                   id:
  *                     type: integer
+ *                     example: 1
  *                   titulo:
  *                     type: string
+ *                     example: "Comida más saludable"
  *                   descripcion:
  *                     type: string
+ *                     example: "Se propone mejorar los almuerzos escolares con frutas y verduras frescas."
  *                   estado:
  *                     type: string
  *                     enum: [pendiente, aceptada, rechazada]
+ *                     example: "aceptada"
  *       500:
  *         description: Error del servidor
  */
-router.get('/', listarPropuestasPublicas);
+router.get('/', listarPropuestasPublicas); // Queda así, sin cambios
+
 
 export default router;
