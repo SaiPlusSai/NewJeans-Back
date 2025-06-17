@@ -1,16 +1,22 @@
 .
 |-- Back
 |   |-- app.js
+|   |-- babel.config.cjs
 |   |-- cifrar.js
 |   |-- controllers
 |   |   |-- documentosBuscarController.js
 |   |   |-- documentosController.js
 |   |   |-- documentosFiltradoController.js
+|   |   |-- favoritosController.js
 |   |   |-- historialBuscarController.js
+|   |   |-- informacionController.js
+|   |   |-- propuestasController.js
+|   |   |-- propuestasPublicasController.js
 |   |   |-- reportesController.js
 |   |   |-- reportesPDFController.js
 |   |   `-- usuariosController.js
 |   |-- db.js
+|   |-- jest.config.cjs
 |   |-- middleware
 |   |   |-- auth.js
 |   |   `-- validarRol.js
@@ -18,7 +24,10 @@
 |   |   |-- documentoModel.js
 |   |   |-- documentosBuscarModel.js
 |   |   |-- documentosFiltradoModel.js
+|   |   |-- favoritosModel.js
 |   |   |-- historialBuscarModel.js
+|   |   |-- informacionModel.js
+|   |   |-- propuestaModel.js
 |   |   |-- reporteModel.js
 |   |   `-- usuariosModel.js
 |   |-- package-lock.json
@@ -27,7 +36,11 @@
 |   |   |-- documentos.js
 |   |   |-- documentosBuscar.js
 |   |   |-- documentosFiltrado.js
+|   |   |-- favoritos.js
 |   |   |-- historialBuscar.js
+|   |   |-- informacion.js
+|   |   |-- propuestas.js
+|   |   |-- propuestasPublicas.js
 |   |   |-- reportes.js
 |   |   |-- reportesPDF.js
 |   |   `-- usuarios.js
@@ -40,9 +53,23 @@
 |   |   |-- reporteDocumentos.ejs
 |   |   |-- reportePorAnio.ejs
 |   |   `-- reportePorTipo.ejs
+|   |-- tests
+|   |   |-- analisisTexto.test.js
+|   |   |-- documentoController.test.js
+|   |   |-- documentosBuscarController.test.js
+|   |   |-- favoritosController.test.js
+|   |   |-- filtradoInteligenteController.test.js
+|   |   |-- historialBuscarController.test.js
+|   |   |-- informacionController.test.js
+|   |   |-- propuestaController.test.js
+|   |   |-- propuestasPublicasController.test.js
+|   |   |-- reportesController.test.js
+|   |   |-- usuariosController.test.js
+|   |   |-- validarRol.test.js
+|   |   `-- verificarToken.test.js
 |   `-- utils
 |       `-- analisisTexto.js
 |-- dependencias.txt
 `-- estructura.txt
 
-8 directories, 37 files
+9 directories, 63 files

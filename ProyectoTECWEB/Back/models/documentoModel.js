@@ -1,5 +1,5 @@
 import db from '../db.js';
-
+import { sufijosPorTipo } from '../utils/sufijos.js';
 // Crear un documento nuevo
 export async function crearDocumento(data) {
   const {
@@ -84,4 +84,28 @@ export async function marcarNoVigente(codigo) {
 // Restaurar
 export async function restaurarDocumento(codigo) {
   await db.query('UPDATE documentos SET vigente = TRUE WHERE codigo = ?', [codigo]);
+}
+
+export async function generarCodigoPorTipo(tipo) {
+  const sufijo = sufijosPorTipo[tipo?.toLowerCase()];
+  if (!sufijo) throw new Error("Tipo inválido");
+
+  const [rows] = await db.query(`
+    SELECT codigo FROM documentos 
+    WHERE LOWER(tipo) = LOWER(?) AND codigo LIKE ?
+    ORDER BY codigo DESC LIMIT 10
+  `, [tipo, `${sufijo}-%`]);
+
+  let mayorNumero = 0;
+
+  for (const row of rows) {
+    const match = row.codigo?.match(new RegExp(`^${sufijo}-(\\d{3})$`));
+    if (match) {
+      const numero = parseInt(match[1]);
+      if (numero > mayorNumero) mayorNumero = numero;
+    }
+  }
+
+  const siguiente = mayorNumero + 1;
+  return `${sufijo}-${String(siguiente).padStart(3, '0')}`;
 }

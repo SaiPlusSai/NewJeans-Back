@@ -5,7 +5,8 @@ import {
   obtenerDocumentoPorCodigo,
   actualizarDocumento,
   eliminarDoc,
-  restaurarDoc
+  restaurarDoc,
+  generarCodigo
 } from '../controllers/documentosController.js';
 
 import { verificarToken } from '../middleware/auth.js';
@@ -80,6 +81,8 @@ router.post('/', verificarToken, soloMIGA, registrarDocumento);
  */
 //Listar todos (disponible para todos por ahora)
 router.get('/', obtenerDocumentos);
+
+router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
 /**
  * @swagger
  * /api/documentos/{codigo}:
@@ -173,5 +176,6 @@ router.delete('/:codigo', verificarToken, soloMIGA, eliminarDoc);
  */
 // Restaurar
 router.patch('/:codigo/restaurar', verificarToken, soloMIGA, restaurarDoc);
+
 
 export default router;

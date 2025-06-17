@@ -14,16 +14,19 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   name: Información
- *   description: Gestión de información complementaria
+ *   name: Información Complementaria
+ *   description: Información educativa pública complementaria a las normativas
+ */
 
+/**
+ * @swagger
  * /api/informacion:
  *   get:
- *     summary: Obtener información pública
- *     tags: [Información]
+ *     summary: Listar toda la información pública complementaria
+ *     tags: [Información Complementaria]
  *     responses:
  *       200:
- *         description: Lista de información pública
+ *         description: Lista de contenido educativo complementario
  *         content:
  *           application/json:
  *             schema:
@@ -37,17 +40,17 @@ const router = express.Router();
  *                     type: string
  *                   contenido:
  *                     type: string
- *                   creado_en:
- *                     type: string
- *                     format: date-time
- *                   nombres:
- *                     type: string
  *       500:
- *         description: Error interno del servidor
+ *         description: Error del servidor
+ */
+router.get('/', listarInformacionPublica);
 
+/**
+ * @swagger
+ * /api/informacion:
  *   post:
- *     summary: Crear nueva información (solo MIGA)
- *     tags: [Información]
+ *     summary: Crear nueva información complementaria (solo MIGA)
+ *     tags: [Información Complementaria]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -66,33 +69,36 @@ const router = express.Router();
  *                 type: string
  *     responses:
  *       201:
- *         description: Información registrada correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
+ *         description: Información creada exitosamente
  *       400:
- *         description: Faltan campos requeridos
+ *         description: Datos inválidos
  *       401:
  *         description: No autorizado
  *       403:
- *         description: Prohibido (requiere rol MIGA)
- *       500:
- *         description: Error interno del servidor
+ *         description: Solo usuarios MIGA pueden acceder
+ */
+router.post(
+  '/',
+  verificarToken,
+  soloMIGA,
+  body('titulo').notEmpty(),
+  body('contenido').notEmpty(),
+  crearInformacionController
+);
 
+/**
+ * @swagger
  * /api/informacion/{id}:
  *   put:
- *     summary: Editar información existente (solo MIGA)
- *     tags: [Información]
+ *     summary: Editar información complementaria existente (solo MIGA)
+ *     tags: [Información Complementaria]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
+ *         description: ID numérico de la información a editar
  *         schema:
  *           type: integer
  *     requestBody:
@@ -111,40 +117,16 @@ const router = express.Router();
  *                 type: string
  *     responses:
  *       200:
- *         description: Información actualizada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
+ *         description: Información actualizada correctamente
  *       400:
  *         description: Datos inválidos
  *       401:
  *         description: No autorizado
  *       403:
- *         description: Prohibido (requiere rol MIGA)
- *       500:
- *         description: Error interno del servidor
+ *         description: Solo usuarios MIGA pueden acceder
+ *       404:
+ *         description: Información no encontrada
  */
-
-// Rutas
-
-// Pública
-router.get('/', listarInformacionPublica);
-
-// Crear info (solo MIGA)
-router.post(
-  '/',
-  verificarToken,
-  soloMIGA,
-  body('titulo').notEmpty(),
-  body('contenido').notEmpty(),
-  crearInformacionController
-);
-
-// Editar info (solo MIGA)
 router.put(
   '/:id',
   verificarToken,
