@@ -161,7 +161,110 @@ router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
 // Ver uno por código
 router.get('/:codigo', obtenerDocumentoPorCodigo);
 
-
+/**
+ * @swagger
+ * tags:
+ *   name: Documentos Auto
+ *   description: Registro automático de documentos con generación de código según el tipo
+ *
+ * /api/documentos/auto:
+ *   post:
+ *     summary: Registrar un documento con código generado automáticamente
+ *     description: |
+ *       Permite registrar un documento generando automáticamente su código basado en el tipo.
+ *       Se deben incluir todos los campos obligatorios del documento.
+ *     tags: [Documentos Auto]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/DocumentoEntradaAuto'
+ *     responses:
+ *       201:
+ *         description: Documento registrado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Documento registrado automáticamente
+ *                 codigo:
+ *                   type: string
+ *                   example: LEY-007
+ *       400:
+ *         description: Faltan datos obligatorios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error interno al registrar el documento
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *
+ * components:
+ *   schemas:
+ *     DocumentoEntradaAuto:
+ *       type: object
+ *       required:
+ *         - tipo
+ *         - fuente
+ *         - descripcion
+ *         - relevancia
+ *         - anio
+ *         - enlace
+ *         - aplicacion_id
+ *         - conceptos_cpe
+ *         - jerarquia
+ *       properties:
+ *         tipo:
+ *           type: string
+ *           enum: [ley, decreto, resolucion, plan, norma, resolucion_municipal, programa, otro]
+ *           example: ley
+ *         fuente:
+ *           type: string
+ *           example: "Ministerio de Justicia"
+ *         descripcion:
+ *           type: string
+ *           example: "Ley de protección de datos personales"
+ *         relevancia:
+ *           type: string
+ *           example: "Alta"
+ *         anio:
+ *           type: integer
+ *           example: 2024
+ *         enlace:
+ *           type: string
+ *           format: uri
+ *           example: "https://drive.google.com/doc123"
+ *         aplicacion_id:
+ *           type: integer
+ *           example: 2
+ *         conceptos_cpe:
+ *           type: string
+ *           example: "Derecho a la privacidad"
+ *         jerarquia:
+ *           type: string
+ *           enum: [Suprema, Alta, Media, Media alta, Media baja, Baja]
+ *           example: "Alta"
+ *
+ *     Error:
+ *       type: object
+ *       properties:
+ *         mensaje:
+ *           type: string
+ *           example: "Falta el campo: tipo"
+ *         error:
+ *           type: string
+ *           example: "Tipo inválido"
+ */
 router.post('/auto', verificarToken, soloMIGA, registrarDocumentoAuto);
 
 
