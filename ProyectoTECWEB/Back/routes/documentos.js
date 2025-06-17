@@ -6,7 +6,8 @@ import {
   actualizarDocumento,
   eliminarDoc,
   restaurarDoc,
-  generarCodigo
+  generarCodigo,
+  registrarDocumentoAuto
 } from '../controllers/documentosController.js';
 
 import { verificarToken } from '../middleware/auth.js';
@@ -103,6 +104,10 @@ router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
  *         description: Documento no encontrado
  */
 // Ver uno por código
+
+
+router.post('/auto', verificarToken, soloMIGA, registrarDocumentoAuto);
+
 router.get('/:codigo', obtenerDocumentoPorCodigo);
 /**
  * @swagger
