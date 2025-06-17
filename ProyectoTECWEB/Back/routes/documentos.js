@@ -7,7 +7,8 @@ import {
   eliminarDoc,
   restaurarDoc,
   generarCodigo,
-  registrarDocumentoAuto
+  registrarDocumentoAuto,
+  obtenerDocumentosEliminados
 } from '../controllers/documentosController.js';
 
 import { verificarToken } from '../middleware/auth.js';
@@ -140,7 +141,7 @@ router.get('/', obtenerDocumentos);
  */
 router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
 
-
+router.get('/eliminados', verificarToken, soloMIGA, obtenerDocumentosEliminados);
 /**
  * @swagger
  * /api/documentos/{codigo}:

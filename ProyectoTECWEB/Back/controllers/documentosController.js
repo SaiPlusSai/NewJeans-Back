@@ -5,7 +5,8 @@ import {
   editarDocumento,
   marcarNoVigente,
   restaurarDocumento,
-  generarCodigoPorTipo
+  generarCodigoPorTipo,
+  listarDocumentosEliminados
 } from '../models/documentoModel.js';
 
 export async function registrarDocumento(req, res) {
@@ -144,5 +145,14 @@ export async function registrarDocumentoAuto(req, res) {
       mensaje: 'Error al registrar documento automáticamente',
       error: error.message
     });
+  }
+}
+export async function obtenerDocumentosEliminados(req, res) {
+  try {
+    const eliminados = await listarDocumentosEliminados();
+    res.json(eliminados);
+  } catch (error) {
+    console.error("Error al obtener documentos eliminados:", error.message);
+    res.status(500).json({ mensaje: 'Error al obtener documentos eliminados' });
   }
 }

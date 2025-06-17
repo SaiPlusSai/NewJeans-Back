@@ -109,3 +109,16 @@ export async function generarCodigoPorTipo(tipo) {
   const siguiente = mayorNumero + 1;
   return `${sufijo}-${String(siguiente).padStart(3, '0')}`;
 }
+export async function listarDocumentosEliminados() {
+  const [rows] = await db.query(`
+    SELECT d.*, a.tipo AS aplicacion, u.nombres AS creado_por_nombre
+    FROM documentos d
+    JOIN aplicacion a ON d.aplicacion_id = a.id
+    JOIN usuarios u ON d.creado_por = u.id
+    WHERE d.vigente = FALSE
+    ORDER BY d.anio DESC
+  `);
+  return rows;
+}
+
+
