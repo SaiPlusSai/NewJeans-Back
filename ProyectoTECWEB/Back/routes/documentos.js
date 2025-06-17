@@ -82,6 +82,61 @@ router.post('/', verificarToken, soloMIGA, registrarDocumento);
 //Listar todos (disponible para todos por ahora)
 router.get('/', obtenerDocumentos);
 
+/**
+ * @swagger
+ * /api/documentos/generar-codigo:
+ *   get:
+ *     summary: Generar código automático para un documento según su tipo
+ *     tags: [Documentos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: tipo
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [ley, decreto, resolucion, plan, norma, resolucion_municipal, programa, otro]
+ *         description: Tipo del documento para generar el código correspondiente
+ *     responses:
+ *       200:
+ *         description: Código generado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 codigo:
+ *                   type: string
+ *                   example: LEY-004
+ *       400:
+ *         description: Falta el tipo de documento
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Falta el tipo de documento
+ *       500:
+ *         description: Error en el servidor al generar el código
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Error al generar código
+ *                 error:
+ *                   type: string
+ *                   example: Tipo inválido
+ *       401:
+ *         description: No autorizado - token inválido o no enviado
+ *       403:
+ *         description: Prohibido - requiere rol MIGA
+ */
 router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
 /**
  * @swagger
