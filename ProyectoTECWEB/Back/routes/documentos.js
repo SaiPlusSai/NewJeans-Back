@@ -140,7 +140,55 @@ router.get('/', obtenerDocumentos);
  *         description: Prohibido - requiere rol MIGA
  */
 router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
-
+/**
+ * @swagger
+ * /api/documentos/eliminados:
+ *   get:
+ *     summary: Obtener documentos eliminados (no vigentes)
+ *     description: Recupera la lista de documentos que han sido marcados como no vigentes (eliminados lógicamente). Solo accesible para usuarios con rol MIGA.
+ *     tags: [Documentos]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de documentos eliminados obtenida exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   codigo:
+ *                     type: string
+ *                   titulo:
+ *                     type: string
+ *                   tipo:
+ *                     type: string
+ *                   fuente:
+ *                     type: string
+ *                   anio:
+ *                     type: integer
+ *                   vigente:
+ *                     type: boolean
+ *                   aplicacion:
+ *                     type: string
+ *                   creado_por:
+ *                     type: integer
+ *                   creado_por_nombre:
+ *                     type: string
+ *                   creado_en:
+ *                     type: string
+ *                     format: date-time
+ *       401:
+ *         description: Token de autenticación no válido o no proporcionado.
+ *       403:
+ *         description: Acceso denegado. El usuario no tiene permisos de rol MIGA.
+ *       500:
+ *         description: Error interno al obtener documentos eliminados.
+ */
 router.get('/eliminados', verificarToken, soloMIGA, obtenerDocumentosEliminados);
 /**
  * @swagger
