@@ -139,6 +139,9 @@ router.get('/', obtenerDocumentos);
  *         description: Prohibido - requiere rol MIGA
  */
 router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
+
+
+router.post('/auto', verificarToken, soloMIGA, registrarDocumentoAuto);
 /**
  * @swagger
  * /api/documentos/{codigo}:
