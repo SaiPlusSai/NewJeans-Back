@@ -141,7 +141,6 @@ router.get('/', obtenerDocumentos);
 router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
 
 
-router.post('/auto', verificarToken, soloMIGA, registrarDocumentoAuto);
 /**
  * @swagger
  * /api/documentos/{codigo}:
