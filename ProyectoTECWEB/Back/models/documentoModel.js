@@ -85,14 +85,14 @@ export async function marcarNoVigente(codigo) {
 export async function restaurarDocumento(codigo) {
   await db.query('UPDATE documentos SET vigente = TRUE WHERE codigo = ?', [codigo]);
 }
-// Generador blindado de código
+
 export async function generarCodigoPorTipo(tipo) {
   const sufijo = sufijosPorTipo[tipo?.toLowerCase()];
   if (!sufijo) throw new Error("Tipo inválido");
 
   const [rows] = await db.query(`
     SELECT codigo FROM documentos 
-    WHERE tipo = ? AND codigo LIKE ? 
+    WHERE LOWER(tipo) = LOWER(?) AND codigo LIKE ?
     ORDER BY codigo DESC LIMIT 10
   `, [tipo, `${sufijo}-%`]);
 
