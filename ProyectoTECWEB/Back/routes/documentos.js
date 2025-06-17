@@ -84,6 +84,9 @@ router.post('/', verificarToken, soloMIGA, registrarDocumento);
 router.get('/', obtenerDocumentos);
 
 router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
+
+
+router.post('/auto', verificarToken, soloMIGA, registrarDocumentoAuto);
 /**
  * @swagger
  * /api/documentos/{codigo}:
@@ -104,9 +107,6 @@ router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
  *         description: Documento no encontrado
  */
 // Ver uno por código
-
-
-router.post('/auto', verificarToken, soloMIGA, registrarDocumentoAuto);
 
 router.get('/:codigo', obtenerDocumentoPorCodigo);
 /**
