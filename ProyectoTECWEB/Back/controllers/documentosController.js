@@ -100,3 +100,49 @@ export async function generarCodigo(req, res) {
     res.status(500).json({ mensaje: "Error al generar código", error: error.message });
   }
 }
+export async function registrarDocumentoAuto(req, res) {
+  try {
+    console.log("📥 [AUTO] Body recibido:", req.body);
+
+    const data = req.body;
+    data.creado_por = req.usuario.id;
+
+    if (!data.tipo) {
+      console.warn("⚠️ Falta el tipo para generar el código");
+      return res.status(400).json({ mensaje: "Falta el tipo para generar el código" });
+    }
+
+    console.log("📨 [AUTO] Tipo recibido para generar código:", data.tipo);
+
+    data.codigo = await generarCodigoPorTipo(data.tipo);
+
+    console.log("✅ [AUTO] Código generado:", data.codigo);
+
+    const camposObligatorios = [
+      'tipo', 'fuente', 'descripcion', 'relevancia',
+      'anio', 'enlace', 'aplicacion_id', 'conceptos_cpe', 'jerarquia'
+    ];
+
+    for (const campo of camposObligatorios) {
+      if (!data[campo]) {
+        console.warn(`⚠️ Falta el campo obligatorio: ${campo}`);
+        return res.status(400).json({ mensaje: `Falta el campo: ${campo}` });
+      }
+    }
+
+    await crearDocumento(data);
+    console.log("✅ [AUTO] Documento insertado correctamente en la base de datos");
+
+    res.status(201).json({
+      mensaje: 'Documento registrado automáticamente',
+      codigo: data.codigo
+    });
+
+  } catch (error) {
+    console.error("❌ Error en registrarDocumentoAuto:", error.message);
+    res.status(500).json({
+      mensaje: 'Error al registrar documento automáticamente',
+      error: error.message
+    });
+  }
+}
