@@ -4,7 +4,8 @@ import {
   buscarDocumentoPorCodigo,
   editarDocumento,
   marcarNoVigente,
-  restaurarDocumento
+  restaurarDocumento,
+  generarCodigoPorTipo
 } from '../models/documentoModel.js';
 
 export async function registrarDocumento(req, res) {
@@ -85,5 +86,17 @@ export async function restaurarDoc(req, res) {
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: 'Error al restaurar documento' });
+  }
+}
+export async function generarCodigo(req, res) {
+  try {
+    const { tipo } = req.query;
+    if (!tipo) return res.status(400).json({ mensaje: "Falta el tipo de documento" });
+
+    const codigo = await generarCodigoPorTipo(tipo);
+    res.json({ codigo });
+  } catch (error) {
+    console.error("Error al generar código:", error.message);
+    res.status(500).json({ mensaje: "Error al generar código", error: error.message });
   }
 }

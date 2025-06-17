@@ -5,7 +5,8 @@ import {
   obtenerDocumentoPorCodigo,
   actualizarDocumento,
   eliminarDoc,
-  restaurarDoc
+  restaurarDoc,
+  generarCodigo
 } from '../controllers/documentosController.js';
 
 import { verificarToken } from '../middleware/auth.js';
@@ -174,4 +175,5 @@ router.delete('/:codigo', verificarToken, soloMIGA, eliminarDoc);
 // Restaurar
 router.patch('/:codigo/restaurar', verificarToken, soloMIGA, restaurarDoc);
 
+router.get('/generar-codigo', verificarToken, soloMIGA, generarCodigo);
 export default router;
