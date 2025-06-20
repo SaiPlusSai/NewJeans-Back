@@ -28,8 +28,6 @@ export async function obtenerUsuariosMIGA(req, res) {
   }
 }
 
-
-// GET general de todos los usuarios
 export async function obtenerUsuarios(req, res) {
   try {
     const usuarios = await listarUsuarios();

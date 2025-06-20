@@ -1,5 +1,9 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { OAuth2Client } from 'google-auth-library';
+import db from '../db.js';
+
+
 import { crearUsuario, buscarPorCorreo } from '../models/usuariosModel.js';
 
 export async function register(req, res) {
@@ -62,4 +66,46 @@ export function perfil(req, res) {
     mensaje: 'Token válido',
     usuario: req.usuario
   });
+}
+const client = new OAuth2Client("TU_CLIENT_ID_GOOGLE");
+
+export async function registroGoogle(req, res) {
+  try {
+    const { tokenId } = req.body;
+
+    const ticket = await client.verifyIdToken({
+      idToken: tokenId,
+      audience: "TU_CLIENT_ID_GOOGLE",
+    });
+
+    const payload = ticket.getPayload();
+    const correo = payload.email;
+    const nombres = payload.given_name;
+    const apellidop = payload.family_name || '';
+
+    // Verifica si ya existe
+    const [result] = await db.query('SELECT * FROM usuarios WHERE correo = ?', [correo]);
+
+    if (result.length === 0) {
+      // No existe → lo crea como COMUNIDAD
+      await db.query(`
+        INSERT INTO usuarios (nombres, apellidop, correo, rol)
+        VALUES (?, ?, ?, 'COMUNIDAD')
+      `, [nombres, apellidop, correo]);
+    }
+
+    // Obtener el usuario actualizado
+    const [rows] = await db.query('SELECT * FROM usuarios WHERE correo = ?', [correo]);
+    const usuario = rows[0];
+
+    // Generar token
+    const token = jwt.sign({ id: usuario.id, rol: usuario.rol }, process.env.JWT_SECRET, {
+      expiresIn: '1d'
+    });
+
+    res.json({ mensaje: 'Usuario autenticado con Google', token });
+  } catch (error) {
+    console.error("Error en registroGoogle:", error);
+    res.status(500).json({ mensaje: 'Error al registrar con Google', error: error.message });
+  }
 }

@@ -159,6 +159,9 @@ router.get('/', verificarToken, soloMIGA, obtenerUsuarios);
  *       500:
  *         description: Error del servidor
  */
+
+router.get('/todos', verificarToken, soloMIGA, obtenerUsuarios);
+
 router.put('/:id/rol', verificarToken, soloMIGA, actualizarRolUsuario);
 
 export default router;
