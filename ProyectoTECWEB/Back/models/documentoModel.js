@@ -87,19 +87,22 @@ export async function restaurarDocumento(codigo) {
 }
 
 export async function generarCodigoPorTipo(tipo) {
-  const sufijo = sufijosPorTipo[tipo?.toLowerCase()];
+  const tipoNormalizado = tipo?.toLowerCase();
+  const sufijo = sufijosPorTipo[tipoNormalizado];
+
   if (!sufijo) throw new Error("Tipo inválido");
 
   const [rows] = await db.query(`
     SELECT codigo FROM documentos 
-    WHERE LOWER(tipo) = LOWER(?) AND codigo LIKE ?
-    ORDER BY codigo DESC LIMIT 10
-  `, [tipo, `${sufijo}-%`]);
+    WHERE codigo LIKE ?
+    ORDER BY codigo DESC
+    LIMIT 20
+  `, [`${sufijo}-%`]);
 
   let mayorNumero = 0;
 
   for (const row of rows) {
-    const match = row.codigo?.match(new RegExp(`^${sufijo}-(\\d{3})$`));
+    const match = row.codigo?.match(new RegExp(`^${sufijo}-(\\d{3})$`, 'i'));
     if (match) {
       const numero = parseInt(match[1]);
       if (numero > mayorNumero) mayorNumero = numero;
@@ -109,6 +112,8 @@ export async function generarCodigoPorTipo(tipo) {
   const siguiente = mayorNumero + 1;
   return `${sufijo}-${String(siguiente).padStart(3, '0')}`;
 }
+
+
 export async function listarDocumentosEliminados() {
   const [rows] = await db.query(`
     SELECT d.*, a.tipo AS aplicacion, u.nombres AS creado_por_nombre
