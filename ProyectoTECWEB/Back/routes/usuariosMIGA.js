@@ -11,7 +11,7 @@ router.post('/', verificarToken, soloMIGA, registrarUsuarioMIGA);
 
 router.get('/solo-miga', verificarToken, soloMIGA, obtenerUsuariosMIGA);
 
-router.get('/', verificarToken, soloMIGA, obtenerUsuarios);
+router.get('/todos', verificarToken, soloMIGA, obtenerUsuarios);
 
 router.put('/:id/rol', verificarToken, soloMIGA, actualizarRolUsuario);
 
