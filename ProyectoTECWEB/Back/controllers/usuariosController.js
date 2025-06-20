@@ -30,12 +30,14 @@ export async function register(req, res) {
   }
 }
 
+
+
 export async function login(req, res) {
   try {
     const { correo, contraseña } = req.body;
     const usuario = await buscarPorCorreo(correo);
 
-    if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado o fue eliminado' });
 
     const match = await bcrypt.compare(contraseña, usuario.contraseña);
     if (!match) return res.status(401).json({ mensaje: 'Contraseña incorrecta' });

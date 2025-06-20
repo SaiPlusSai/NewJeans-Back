@@ -1,6 +1,6 @@
 import { crearUsuarioMIGA, listarUsuariosMIGA,listarUsuarios, cambiarRolUsuario
 } from '../models/usuariosMIGA.js';
-
+import bcrypt from 'bcrypt';
 export async function registrarUsuarioMIGA(req, res) {
   try {
     const { nombres, apellidop, apellidom, correo, contraseña } = req.body;
@@ -9,7 +9,9 @@ export async function registrarUsuarioMIGA(req, res) {
       return res.status(400).json({ mensaje: "Faltan campos obligatorios" });
     }
 
-    await crearUsuarioMIGA({ nombres, apellidop, apellidom, correo, contraseña });
+    const hash = await bcrypt.hash(contraseña, 10); // 🔐 Hash aquí
+
+    await crearUsuarioMIGA({ nombres, apellidop, apellidom, correo, contraseña: hash });
 
     res.status(201).json({ mensaje: "Usuario MIGA creado correctamente" });
   } catch (error) {
@@ -17,7 +19,6 @@ export async function registrarUsuarioMIGA(req, res) {
     res.status(500).json({ mensaje: "Error al crear usuario MIGA", error: error.message });
   }
 }
-
 export async function obtenerUsuariosMIGA(req, res) {
   try {
     const usuarios = await listarUsuariosMIGA();
