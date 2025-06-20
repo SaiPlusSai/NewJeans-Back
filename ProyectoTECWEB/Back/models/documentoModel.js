@@ -91,7 +91,6 @@ export async function generarCodigoPorTipo(tipo) {
   const sufijo = sufijosPorTipo[tipoNormalizado];
 
   if (!sufijo) throw new Error("Tipo inválido");
-
   const [rows] = await db.query(`
     SELECT codigo FROM documentos 
     WHERE codigo LIKE ?
