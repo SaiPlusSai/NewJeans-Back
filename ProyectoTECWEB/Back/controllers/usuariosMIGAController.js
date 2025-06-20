@@ -1,6 +1,10 @@
-import { crearUsuarioMIGA, listarUsuariosMIGA,listarUsuarios, cambiarRolUsuario
+import { crearUsuarioMIGA, listarUsuariosMIGA,listarUsuarios, cambiarRolUsuario, eliminarLogicoUsuario
 } from '../models/usuariosMIGA.js';
 import bcrypt from 'bcrypt';
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 export async function registrarUsuarioMIGA(req, res) {
   try {
     const { nombres, apellidop, apellidom, correo, contraseña } = req.body;
@@ -9,7 +13,11 @@ export async function registrarUsuarioMIGA(req, res) {
       return res.status(400).json({ mensaje: "Faltan campos obligatorios" });
     }
 
+<<<<<<< Updated upstream
     const hash = await bcrypt.hash(contraseña, 10); // 🔐 Hash aquí
+=======
+    const hash = await bcrypt.hash(contraseña, 10); 
+>>>>>>> Stashed changes
 
     await crearUsuarioMIGA({ nombres, apellidop, apellidom, correo, contraseña: hash });
 
@@ -54,5 +62,15 @@ export async function actualizarRolUsuario(req, res) {
   } catch (error) {
     console.error("Error al cambiar rol:", error.message);
     res.status(500).json({ mensaje: 'Error al cambiar rol' });
+  }
+}
+export async function eliminarUsuario(req, res) {
+  try {
+    const { id } = req.params;
+    await eliminarLogicoUsuario(id);
+    res.json({ mensaje: `Usuario con ID ${id} marcado como eliminado` });
+  } catch (error) {
+    console.error('Error al eliminar usuario:', error.message);
+    res.status(500).json({ mensaje: 'Error al eliminar usuario' });
   }
 }

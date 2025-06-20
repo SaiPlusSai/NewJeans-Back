@@ -38,3 +38,7 @@ export async function cambiarRolUsuario(id, nuevoRol) {
     UPDATE usuarios SET rol = ? WHERE id = ?
   `, [nuevoRol, id]);
 }
+export async function eliminarLogicoUsuario(id) {
+  await db.query(`UPDATE usuarios SET eliminado = TRUE WHERE id = ?`, [id]);
+}
+
