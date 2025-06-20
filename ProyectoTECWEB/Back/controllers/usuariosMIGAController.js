@@ -1,4 +1,5 @@
-import { crearUsuarioMIGA, listarUsuariosMIGA } from '../models/usuariosMIGA.js';
+import { crearUsuarioMIGA, listarUsuariosMIGA,listarUsuarios, cambiarRolUsuario
+} from '../models/usuariosMIGA.js';
 
 export async function registrarUsuarioMIGA(req, res) {
   try {
@@ -27,3 +28,32 @@ export async function obtenerUsuariosMIGA(req, res) {
   }
 }
 
+
+// GET general de todos los usuarios
+export async function obtenerUsuarios(req, res) {
+  try {
+    const usuarios = await listarUsuarios();
+    res.json(usuarios);
+  } catch (error) {
+    console.error("Error al obtener usuarios:", error.message);
+    res.status(500).json({ mensaje: 'Error al obtener usuarios' });
+  }
+}
+
+// PUT para cambiar rol
+export async function actualizarRolUsuario(req, res) {
+  try {
+    const { id } = req.params;
+    const { nuevoRol } = req.body;
+
+    if (!['MIGA', 'COMUNIDAD'].includes(nuevoRol)) {
+      return res.status(400).json({ mensaje: 'Rol inválido' });
+    }
+
+    await cambiarRolUsuario(id, nuevoRol);
+    res.json({ mensaje: `Rol actualizado a ${nuevoRol}` });
+  } catch (error) {
+    console.error("Error al cambiar rol:", error.message);
+    res.status(500).json({ mensaje: 'Error al cambiar rol' });
+  }
+}

@@ -32,7 +32,6 @@ app.use('/api/favoritos', favoritosRoutes);
 app.use('/api/propuestas', propuestasRoutes);
 app.use('/api/propuestas/publicas', propuestasPublicasRoutes);
 app.use('/api/informacion', informacionRoutes);
-
 app.use('/api/usuarios-miga', usuariosMIGARoutes);
 export default app;
 
