@@ -26,7 +26,7 @@ const router = express.Router();
  *         name: tipo
  *         schema:
  *           type: string
- *           enum: [ley, decreto, resolucion, circular, reglamento, otro]
+ *           enum: [ley, decreto, resolucion, norma, resolucion Ministerial, plan, programa, otro]
  *         description: Tipo de documento (valores predefinidos)
  * 
  *       - in: query
