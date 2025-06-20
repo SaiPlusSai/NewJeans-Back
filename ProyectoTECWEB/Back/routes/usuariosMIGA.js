@@ -123,7 +123,7 @@ router.get('/solo-miga', verificarToken, soloMIGA, obtenerUsuariosMIGA);
  *       500:
  *         description: Error del servidor
  */
-router.get('/', verificarToken, soloMIGA, obtenerUsuarios);
+router.get('/todos', verificarToken, soloMIGA, obtenerUsuarios);
 /**
  * @swagger
  * /api/usuarios-miga/{id}/rol:
@@ -159,9 +159,6 @@ router.get('/', verificarToken, soloMIGA, obtenerUsuarios);
  *       500:
  *         description: Error del servidor
  */
-
-router.get('/todos', verificarToken, soloMIGA, obtenerUsuarios);
-
 router.put('/:id/rol', verificarToken, soloMIGA, actualizarRolUsuario);
 
 export default router;
