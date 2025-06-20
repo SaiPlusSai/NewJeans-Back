@@ -42,8 +42,6 @@ const router = express.Router();
  *                 type: string
  *               contraseña:
  *                 type: string
- *               rol:
- *                 type: string
  *     responses:
  *       201:
  *         description: Usuario registrado exitosamente.
