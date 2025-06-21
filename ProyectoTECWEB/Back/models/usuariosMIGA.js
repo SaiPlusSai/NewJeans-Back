@@ -32,13 +32,20 @@ export async function listarUsuarios() {
   return rows;
 }
 
-// Cambiar rol (queda igual, no depende de eliminado)
+
 export async function cambiarRolUsuario(id, nuevoRol) {
   await db.query(`
     UPDATE usuarios SET rol = ? WHERE id = ?
   `, [nuevoRol, id]);
 }
+
+
+// Eliminar lógico
 export async function eliminarLogicoUsuario(id) {
   await db.query(`UPDATE usuarios SET eliminado = TRUE WHERE id = ?`, [id]);
 }
 
+// Restaurar usuario
+export async function restaurarUsuario(id) {
+  await db.query(`UPDATE usuarios SET eliminado = FALSE WHERE id = ?`, [id]);
+}

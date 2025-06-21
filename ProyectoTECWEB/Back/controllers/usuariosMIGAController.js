@@ -1,4 +1,4 @@
-import { crearUsuarioMIGA, listarUsuariosMIGA,listarUsuarios, cambiarRolUsuario, eliminarLogicoUsuario
+import { crearUsuarioMIGA, listarUsuariosMIGA,listarUsuarios, cambiarRolUsuario, eliminarLogicoUsuario,restaurarUsuario
 } from '../models/usuariosMIGA.js';
 import bcrypt from 'bcrypt';
 
@@ -57,13 +57,25 @@ export async function actualizarRolUsuario(req, res) {
     res.status(500).json({ mensaje: 'Error al cambiar rol' });
   }
 }
+
 export async function eliminarUsuario(req, res) {
   try {
     const { id } = req.params;
     await eliminarLogicoUsuario(id);
-    res.json({ mensaje: `Usuario con ID ${id} marcado como eliminado` });
+    res.json({ mensaje: 'Usuario eliminado lógicamente' });
   } catch (error) {
-    console.error('Error al eliminar usuario:', error.message);
+    console.error("Error al eliminar usuario:", error.message);
     res.status(500).json({ mensaje: 'Error al eliminar usuario' });
+  }
+}
+
+export async function restaurarUsuarioEliminado(req, res) {
+  try {
+    const { id } = req.params;
+    await restaurarUsuario(id);
+    res.json({ mensaje: 'Usuario restaurado correctamente' });
+  } catch (error) {
+    console.error("Error al restaurar usuario:", error.message);
+    res.status(500).json({ mensaje: 'Error al restaurar usuario' });
   }
 }
