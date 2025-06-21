@@ -132,7 +132,53 @@ router.post('/login', login);
  */
 router.get('/perfil', verificarToken, perfil);
 
-
+/**
+ * @swagger
+ * /api/usuarios/{id}:
+ *   patch:
+ *     summary: Editar datos generales de un usuario
+ *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del usuario a editar
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombres:
+ *                 type: string
+ *               apellidop:
+ *                 type: string
+ *               apellidom:
+ *                 type: string
+ *               correo:
+ *                 type: string
+ *                 format: email
+ *               contraseña:
+ *                 type: string
+ *             example:
+ *               nombres: ""
+ *               apellidop: "" 
+ *               apellidom:  ""
+ *               correo:  ""
+ *               contraseña: ""  
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado correctamente
+ *       403:
+ *         description: No se permite modificar el rol ni el estado eliminado
+ *       500:
+ *         description: Error al actualizar usuario
+ */
 router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
 
 router.post('/registro-google', registroGoogle);
