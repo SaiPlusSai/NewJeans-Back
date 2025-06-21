@@ -4,7 +4,7 @@ import { OAuth2Client } from 'google-auth-library';
 import db from '../db.js';
 
 
-import { crearUsuario, buscarPorCorreo } from '../models/usuariosModel.js';
+import { crearUsuario, buscarPorCorreo,editarUsuario } from '../models/usuariosModel.js';
 
 export async function register(req, res) {
   try {
@@ -109,5 +109,23 @@ export async function registroGoogle(req, res) {
   } catch (error) {
     console.error("Error en registroGoogle:", error);
     res.status(500).json({ mensaje: 'Error al registrar con Google', error: error.message });
+  }
+}
+
+export async function actualizarUsuarioGeneral(req, res) {
+  try {
+    const { id } = req.params;
+    const datos = req.body;
+
+    // Evitar cambios de rol o eliminado desde aquí
+    if ('rol' in datos || 'eliminado' in datos) {
+      return res.status(403).json({ mensaje: 'No se permite modificar el rol ni el estado eliminado' });
+    }
+
+    await editarUsuario(id, datos);
+    res.json({ mensaje: 'Usuario actualizado correctamente' });
+  } catch (error) {
+    console.error('Error al actualizar usuario:', error.message);
+    res.status(500).json({ mensaje: 'Error al actualizar usuario' });
   }
 }

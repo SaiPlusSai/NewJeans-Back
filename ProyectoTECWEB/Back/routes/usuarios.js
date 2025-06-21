@@ -6,7 +6,7 @@
  */
 
 import express from 'express';
-import { login, register, perfil,registroGoogle } from '../controllers/usuariosController.js';
+import { login, register, perfil,registroGoogle,actualizarUsuarioGeneral  } from '../controllers/usuariosController.js';
 import { verificarToken } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -131,6 +131,9 @@ router.post('/login', login);
  *       bearerFormat: JWT
  */
 router.get('/perfil', verificarToken, perfil);
+
+
+router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
 
 router.post('/registro-google', registroGoogle);
 export default router;
