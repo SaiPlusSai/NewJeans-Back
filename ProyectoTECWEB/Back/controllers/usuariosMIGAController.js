@@ -1,10 +1,7 @@
 import { crearUsuarioMIGA, listarUsuariosMIGA,listarUsuarios, cambiarRolUsuario, eliminarLogicoUsuario
 } from '../models/usuariosMIGA.js';
 import bcrypt from 'bcrypt';
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 export async function registrarUsuarioMIGA(req, res) {
   try {
     const { nombres, apellidop, apellidom, correo, contraseña } = req.body;
@@ -13,11 +10,7 @@ export async function registrarUsuarioMIGA(req, res) {
       return res.status(400).json({ mensaje: "Faltan campos obligatorios" });
     }
 
-<<<<<<< Updated upstream
-    const hash = await bcrypt.hash(contraseña, 10); // 🔐 Hash aquí
-=======
     const hash = await bcrypt.hash(contraseña, 10); 
->>>>>>> Stashed changes
 
     await crearUsuarioMIGA({ nombres, apellidop, apellidom, correo, contraseña: hash });
 
