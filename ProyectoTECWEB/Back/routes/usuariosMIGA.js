@@ -1,7 +1,7 @@
 import express from 'express';
 import { registrarUsuarioMIGA, obtenerUsuariosMIGA,obtenerUsuarios, actualizarRolUsuario,
       eliminarUsuario,
-  restaurarUsuarioEliminado 
+  restaurarUsuarioEliminado,obtenerUsuariosEliminados
  } from '../controllers/usuariosMIGAController.js';
 import { verificarToken } from '../middleware/auth.js';
 import { soloMIGA } from '../middleware/validarRol.js';
@@ -222,5 +222,8 @@ router.put('/:id/eliminar', verificarToken, soloMIGA, eliminarUsuario);
  *         description: Error al restaurar usuario
  */
 router.put('/:id/restaurar', verificarToken, soloMIGA, restaurarUsuarioEliminado);
+
+router.get('/eliminados', verificarToken, soloMIGA, obtenerUsuariosEliminados);
+
 export default router;
 

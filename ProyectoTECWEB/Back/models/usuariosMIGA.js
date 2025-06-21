@@ -49,3 +49,12 @@ export async function eliminarLogicoUsuario(id) {
 export async function restaurarUsuario(id) {
   await db.query(`UPDATE usuarios SET eliminado = FALSE WHERE id = ?`, [id]);
 }
+export async function listarUsuariosEliminados() {
+  const [rows] = await db.query(`
+    SELECT id, nombres, apellidop, apellidom, correo, rol, creado_en
+    FROM usuarios
+    WHERE eliminado = TRUE
+    ORDER BY creado_en DESC
+  `);
+  return rows;
+}
