@@ -222,7 +222,42 @@ router.put('/:id/eliminar', verificarToken, soloMIGA, eliminarUsuario);
  *         description: Error al restaurar usuario
  */
 router.put('/:id/restaurar', verificarToken, soloMIGA, restaurarUsuarioEliminado);
-
+/**
+ * @swagger
+ * /api/usuarios-miga/eliminados:
+ *   get:
+ *     summary: Obtener usuarios eliminados lógicamente
+ *     tags: [Usuarios MIGA]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios eliminados
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   nombres:
+ *                     type: string
+ *                   apellidop:
+ *                     type: string
+ *                   apellidom:
+ *                     type: string
+ *                   correo:
+ *                     type: string
+ *                   rol:
+ *                     type: string
+ *                   creado_en:
+ *                     type: string
+ *                     format: date-time
+ *       500:
+ *         description: Error al listar usuarios eliminados
+ */
 router.get('/eliminados', verificarToken, soloMIGA, obtenerUsuariosEliminados);
 
 export default router;
