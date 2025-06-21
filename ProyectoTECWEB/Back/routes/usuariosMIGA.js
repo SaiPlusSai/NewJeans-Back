@@ -162,8 +162,65 @@ router.get('/todos', verificarToken, soloMIGA, obtenerUsuarios);
  *         description: Error del servidor
  */
 router.put('/:id/rol', verificarToken, soloMIGA, actualizarRolUsuario);
-
+/**
+ * @swagger
+ * /api/usuarios-miga/{id}/eliminar:
+ *   put:
+ *     summary: Eliminar lógicamente un usuario
+ *     tags: [Usuarios MIGA]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del usuario a eliminar
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado lógicamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Usuario eliminado lógicamente
+ *       500:
+ *         description: Error al eliminar usuario
+ */
 router.put('/:id/eliminar', verificarToken, soloMIGA, eliminarUsuario);
+/**
+ * @swagger
+ * /api/usuarios-miga/{id}/restaurar:
+ *   put:
+ *     summary: Restaurar un usuario eliminado lógicamente
+ *     tags: [Usuarios MIGA]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del usuario a restaurar
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Usuario restaurado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Usuario restaurado correctamente
+ *       500:
+ *         description: Error al restaurar usuario
+ */
 router.put('/:id/restaurar', verificarToken, soloMIGA, restaurarUsuarioEliminado);
 export default router;
 
