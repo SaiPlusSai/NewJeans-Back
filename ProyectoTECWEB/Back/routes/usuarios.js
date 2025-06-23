@@ -6,7 +6,7 @@
  */
 
 import express from 'express';
-import { login, register, perfil,registroGoogle,actualizarUsuarioGeneral  } from '../controllers/usuariosController.js';
+import { login, register, perfil,registroGoogle,actualizarUsuarioGeneral,registroComunidad} from '../controllers/usuariosController.js';
 import { verificarToken } from '../middleware/auth.js';
 
 const router = express.Router();
@@ -180,6 +180,8 @@ router.get('/perfil', verificarToken, perfil);
  *         description: Error al actualizar usuario
  */
 router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
+
+router.post('/registro-comunidad',verificarToken, registroComunidad);
 
 router.post('/registro-google', registroGoogle);
 export default router;

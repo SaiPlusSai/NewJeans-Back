@@ -2,8 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { OAuth2Client } from 'google-auth-library';
 import db from '../db.js';
-
-
+import { generarUsuarioDefecto } from '../utils/usuario_defecto.js';
 import { crearUsuario, buscarPorCorreo,editarUsuario } from '../models/usuariosModel.js';
 
 export async function register(req, res) {
@@ -30,17 +29,30 @@ export async function register(req, res) {
   }
 }
 
-
-
 export async function login(req, res) {
   try {
-    const { correo, contraseña } = req.body;
-    const usuario = await buscarPorCorreo(correo);
+    const { correo, usuario_defecto, contraseña } = req.body;
 
-    if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado o fue eliminado' });
+    if (!contraseña || (!correo && !usuario_defecto)) {
+      return res.status(400).json({ mensaje: 'Debe ingresar correo o usuario_defecto, y la contraseña' });
+    }
+
+    const [rows] = await db.query(`
+      SELECT * FROM usuarios
+      WHERE eliminado = FALSE AND (${correo ? 'correo = ?' : '1=0'} OR ${usuario_defecto ? 'Usuario_defecto = ?' : '1=0'})
+      LIMIT 1
+    `, [correo, usuario_defecto].filter(Boolean)); // Solo valores válidos
+
+    const usuario = rows[0];
+
+    if (!usuario) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado o fue eliminado' });
+    }
 
     const match = await bcrypt.compare(contraseña, usuario.contraseña);
-    if (!match) return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+    if (!match) {
+      return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+    }
 
     const token = jwt.sign({ id: usuario.id, rol: usuario.rol }, process.env.JWT_SECRET, {
       expiresIn: '4h'
@@ -54,15 +66,16 @@ export async function login(req, res) {
         nombres: usuario.nombres,
         apellidop: usuario.apellidop,
         apellidom: usuario.apellidom,
-        rol: usuario.rol
+        rol: usuario.rol,
+        usuario_defecto: usuario.Usuario_defecto
       }
     });
+
   } catch (error) {
-    console.error(error);
+    console.error('❌ Error en login:', error.message);
     res.status(500).json({ mensaje: 'Error al iniciar sesión' });
   }
 }
-
 export function perfil(req, res) {
   res.json({
     mensaje: 'Token válido',
@@ -127,5 +140,44 @@ export async function actualizarUsuarioGeneral(req, res) {
   } catch (error) {
     console.error('Error al actualizar usuario:', error.message);
     res.status(500).json({ mensaje: 'Error al actualizar usuario' });
+  }
+}
+
+export async function registroComunidad(req, res) {
+  try {
+    const { nombres, apellidop, apellidom, carnet_ci, correo = null } = req.body;
+
+    if (!nombres || !apellidop || !carnet_ci) {
+      return res.status(400).json({ mensaje: 'Faltan campos obligatorios: nombres, apellidop, carnet_ci' });
+    }
+
+   
+    if (correo) {
+      const existe = await buscarPorCorreo(correo);
+      if (existe) return res.status(400).json({ mensaje: 'El correo ya está registrado' });
+    }
+
+  
+    const Usuario_defecto = await generarUsuarioDefecto(nombres, apellidop, apellidom);
+
+    
+    const hash = await bcrypt.hash(carnet_ci, 10);
+
+    await crearUsuario({
+      nombres,
+      apellidop,
+      apellidom,
+      carnet_ci,
+      correo,
+      contraseña: hash,
+      rol: 'COMUNIDAD',
+      Usuario_defecto
+    });
+
+    res.status(201).json({ mensaje: `Usuario COMUNIDAD creado correctamente`, Usuario_defecto });
+
+  } catch (error) {
+    console.error("Error en registerComunidad:", error.message);
+    res.status(500).json({ mensaje: 'Error al registrar usuario COMUNIDAD', error: error.message });
   }
 }
