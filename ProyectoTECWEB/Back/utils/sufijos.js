@@ -1,24 +1,28 @@
-
 export const sufijosPorTipo = {
   ley: "LEY",
-  decreto: "DEC",
-  resolucion: "RES",
-  plan: "PLN",
-  norma: "NOR",
-  resolucion_municipal: "RSM",
-  programa: "PRG",
-  otro: "OTR",
-
-  
   "ley suprema": "LEY",
+
+  decreto: "DEC",
   "decreto supremo": "DEC",
+
+  resolucion: "RES",
+  "resolución": "RES",
   "resolución ministerial": "RES",
   "resolución suprema": "RES",
-  "resolución": "RES",
-  "normativa": "NOR",
+
+  plan: "PLN",
+  "plan nacional": "PLN",
+
+  norma: "NOR",
+  normativa: "NOR",
+
+  resolucion_municipal: "RSM",
   "resolucion municipal": "RSM",
   "resolución municipal": "RSM",
+
+  programa: "PRG",
   "programa social": "PRG",
-  "plan nacional": "PLN",
+
+  otro: "OTR",
   "otro documento": "OTR"
 };

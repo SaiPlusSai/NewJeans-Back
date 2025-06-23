@@ -101,6 +101,9 @@ export async function generarCodigo(req, res) {
     res.status(500).json({ mensaje: "Error al generar código", error: error.message });
   }
 }
+
+import { tipoEnumMap } from "../utils/tipoEnumMap.js"; // si lo guardás como módulo externo
+
 export async function registrarDocumentoAuto(req, res) {
   try {
     console.log("📥 [AUTO] Body recibido:", req.body);
@@ -113,7 +116,14 @@ export async function registrarDocumentoAuto(req, res) {
       return res.status(400).json({ mensaje: "Falta el tipo para generar el código" });
     }
 
-    console.log("📨 [AUTO] Tipo recibido para generar código:", data.tipo);
+    const tipoNormalizado = tipoEnumMap[data.tipo?.toLowerCase()];
+    if (!tipoNormalizado) {
+      return res.status(400).json({ mensaje: `Tipo inválido: ${data.tipo}` });
+    }
+
+    data.tipo = tipoNormalizado;
+
+    console.log("📨 [AUTO] Tipo normalizado para código:", data.tipo);
 
     data.codigo = await generarCodigoPorTipo(data.tipo);
 
@@ -147,6 +157,8 @@ export async function registrarDocumentoAuto(req, res) {
     });
   }
 }
+
+
 export async function obtenerDocumentosEliminados(req, res) {
   try {
     const eliminados = await listarDocumentosEliminados();
