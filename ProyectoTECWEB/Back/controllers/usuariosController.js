@@ -72,16 +72,18 @@ export async function login(req, res) {
     });
 
   } catch (error) {
-    console.error('❌ Error en login:', error.message);
+    console.error('Error en login:', error.message);
     res.status(500).json({ mensaje: 'Error al iniciar sesión' });
   }
 }
+
 export function perfil(req, res) {
   res.json({
     mensaje: 'Token válido',
     usuario: req.usuario
   });
 }
+
 const client = new OAuth2Client("TU_CLIENT_ID_GOOGLE");
 
 export async function registroGoogle(req, res) {
@@ -130,7 +132,7 @@ export async function actualizarUsuarioGeneral(req, res) {
     const { id } = req.params;
     const datos = req.body;
 
-    // Evitar cambios de rol o eliminado desde aquí
+    
     if ('rol' in datos || 'eliminado' in datos) {
       return res.status(403).json({ mensaje: 'No se permite modificar el rol ni el estado eliminado' });
     }

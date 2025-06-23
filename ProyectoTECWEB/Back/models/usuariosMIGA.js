@@ -67,3 +67,7 @@ export async function listarUsuariosEliminados() {
   `);
   return rows;
 }
+export async function buscarUsuarioPorId(id) {
+  const [rows] = await db.query('SELECT * FROM usuarios WHERE id = ?', [id]);
+  return rows[0];
+}
