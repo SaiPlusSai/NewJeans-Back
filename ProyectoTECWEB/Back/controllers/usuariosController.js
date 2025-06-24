@@ -31,17 +31,17 @@ export async function register(req, res) {
 
 export async function login(req, res) {
   try {
-    const { correo, usuario_defecto, contraseña } = req.body;
+    const { login, contraseña } = req.body;
 
-    if (!contraseña || (!correo && !usuario_defecto)) {
-      return res.status(400).json({ mensaje: 'Debe ingresar correo o usuario_defecto, y la contraseña' });
+    if (!login || !contraseña) {
+      return res.status(400).json({ mensaje: 'Debe ingresar usuario/correo y contraseña' });
     }
 
     const [rows] = await db.query(`
       SELECT * FROM usuarios
-      WHERE eliminado = FALSE AND (${correo ? 'correo = ?' : '1=0'} OR ${usuario_defecto ? 'Usuario_defecto = ?' : '1=0'})
+      WHERE eliminado = FALSE AND (correo = ? OR Usuario_defecto = ?)
       LIMIT 1
-    `, [correo, usuario_defecto].filter(Boolean)); // Solo valores válidos
+    `, [login, login]);
 
     const usuario = rows[0];
 
@@ -76,6 +76,7 @@ export async function login(req, res) {
     res.status(500).json({ mensaje: 'Error al iniciar sesión' });
   }
 }
+
 
 export function perfil(req, res) {
   res.json({
