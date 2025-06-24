@@ -181,7 +181,89 @@ router.patch('/cambiar-contrasenia', verificarToken, cambiarContrasenia);
  *         description: Error al actualizar usuario
  */
 router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
-
+/**
+ * @swagger
+ * /api/usuarios/registro-comunidad:
+ *   post:
+ *     summary: Registrar un nuevo usuario COMUNIDAD
+ *     description: |
+ *       Registra un nuevo usuario con rol "COMUNIDAD".
+ *       Requiere token de autenticación. La contraseña por defecto será el número de CI encriptado.
+ *     tags: [Usuarios Actualización]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombres
+ *               - apellidop
+ *               - carnet_ci
+ *             properties:
+ *               nombres:
+ *                 type: string
+ *                 example: ""
+ *               apellidop:
+ *                 type: string
+ *                 example: ""
+ *               apellidom:
+ *                 type: string
+ *                 example: ""
+ *               carnet_ci:
+ *                 type: string
+ *                 example: ""
+ *               correo:
+ *                 type: string
+ *                 format: email
+ *                 example: 
+ *               contraseña:
+ *                 type: string
+ *                 format: password
+ *                 example: 
+ *     responses:
+ *       201:
+ *         description: Usuario COMUNIDAD creado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Usuario COMUNIDAD creado correctamente
+ *                 Usuario_defecto:
+ *                   type: string
+ *                   example: mrodriguez
+ *                 observacion:
+ *                   type: string
+ *                   example: La contraseña por defecto es el número de carnet de identidad (CI)
+ *       400:
+ *         description: Faltan campos requeridos o correo duplicado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Faltan campos obligatorios: nombres, apellidop, carnet_ci"
+ *       500:
+ *         description: Error interno al registrar
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Error al registrar usuario COMUNIDAD
+ *                 error:
+ *                   type: string
+ *                   example: Descripción del error
+ */
 router.post('/registro-comunidad',verificarToken, registroComunidad);
 
 router.post('/registro-google', registroGoogle);
