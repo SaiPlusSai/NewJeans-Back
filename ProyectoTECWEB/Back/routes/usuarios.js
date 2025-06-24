@@ -131,7 +131,90 @@ router.post('/login', login);
  *       bearerFormat: JWT
  */
 router.get('/perfil', verificarToken, perfil);
-
+/**
+ * @swagger
+ * /api/usuarios/cambiar-contrasenia:
+ *   patch:
+ *     summary: Cambiar contraseña del usuario actual
+ *     description: |
+ *       Permite a un usuario autenticado actualizar su contraseña.
+ *       Requiere token válido. Verifica la contraseña actual antes de aplicar el cambio.
+ *     tags: [Usuarios Actualización]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - actual
+ *               - nueva
+ *             properties:
+ *               actual:
+ *                 type: string
+ *                 format: password
+ *                 example: contraseniaAnterior123
+ *               nueva:
+ *                 type: string
+ *                 format: password
+ *                 example: nuevaContrasenia456
+ *     responses:
+ *       200:
+ *         description: Contraseña actualizada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Contraseña actualizada correctamente
+ *       400:
+ *         description: Faltan campos requeridos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Debe proporcionar la contraseña actual y la nueva
+ *       401:
+ *         description: Contraseña actual incorrecta
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: La contraseña actual es incorrecta
+ *       404:
+ *         description: Usuario no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Usuario no encontrado
+ *       500:
+ *         description: Error del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Error al cambiar contraseña
+ *                 error:
+ *                   type: string
+ *                   example: Descripción técnica del error
+ */
 router.patch('/cambiar-contrasenia', verificarToken, cambiarContrasenia);
 /**
  * @swagger
