@@ -1,19 +1,16 @@
 import db from '../db.js';
 import bcrypt from 'bcrypt';
 
-// Crear usuario MIGA con contraseña encriptada
-export async function crearUsuarioMIGA({ nombres, apellidop, apellidom, carnet_ci, correo, contraseña, Usuario_defecto = null }) {
-  const hash = await bcrypt.hash(contraseña, 10);
 
+export async function crearUsuarioMIGA({ nombres, apellidop, apellidom, carnet_ci, correo, contraseña, Usuario_defecto = null }) {
   const sql = `
     INSERT INTO usuarios (
       nombres, apellidop, apellidom, carnet_ci, correo, contraseña, rol, Usuario_defecto, eliminado
     ) VALUES (?, ?, ?, ?, ?, ?, 'MIGA', ?, FALSE)
   `;
 
-  await db.query(sql, [nombres, apellidop, apellidom, carnet_ci, correo, hash, Usuario_defecto]);
+  await db.query(sql, [nombres, apellidop, apellidom, carnet_ci, correo, contraseña, Usuario_defecto]);
 }
-
 // Listar solo usuarios MIGA no eliminados
 export async function listarUsuariosMIGA() {
   const [rows] = await db.query(`

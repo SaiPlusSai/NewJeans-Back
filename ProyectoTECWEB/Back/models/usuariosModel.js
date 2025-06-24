@@ -1,19 +1,18 @@
 import db from '../db.js';
 import bcrypt from 'bcrypt';
 
-// Buscar solo usuarios NO eliminados (para login y seguridad)
 export async function buscarPorCorreo(correo) {
   const [rows] = await db.query('SELECT * FROM usuarios WHERE correo = ? AND eliminado = FALSE', [correo]);
   return rows[0];
 }
 
-// Buscar incluso eliminados
+
 export async function buscarPorCorreoIncluyendoEliminados(correo) {
   const [rows] = await db.query('SELECT * FROM usuarios WHERE correo = ?', [correo]);
   return rows[0];
 }
 
-// Crear nuevo usuario
+
 export async function crearUsuario(data) {
   const {
     nombres,
@@ -21,12 +20,10 @@ export async function crearUsuario(data) {
     apellidom,
     carnet_ci,
     correo,
-    contraseña,
+    contraseña, 
     rol = 'COMUNIDAD',
     Usuario_defecto = null
   } = data;
-
-  const hash = await bcrypt.hash(contraseña, 10);
 
   const sql = `
     INSERT INTO usuarios (nombres, apellidop, apellidom, carnet_ci, correo, contraseña, rol, Usuario_defecto, eliminado)
@@ -39,13 +36,12 @@ export async function crearUsuario(data) {
     apellidom,
     carnet_ci,
     correo,
-    hash,
+    contraseña, 
     rol,
     Usuario_defecto
   ]);
 }
 
-// Editar usuario (solo si no está eliminado)
 export async function editarUsuario(id, datos) {
   const {
     nombres,
