@@ -259,7 +259,90 @@ router.put('/:id/restaurar', verificarToken, soloMIGA, restaurarUsuarioEliminado
  *         description: Error al listar usuarios eliminados
  */
 router.get('/eliminados', verificarToken, soloMIGA, obtenerUsuariosEliminados);
-
+/**
+ * @swagger
+ * tags:
+ *   name: Usuarios Actualización
+ *   description: Gestión de usuarios (MIGA y comunidad)
+ *
+ * /api/usuarios-miga/registro-miga:
+ *   post:
+ *     summary: Registrar un nuevo usuario MIGA
+ *     description: Registra un nuevo usuario con rol MIGA. Requiere token de autenticación.
+ *     tags: [Usuarios Actualización]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombres
+ *               - apellidop
+ *               - carnet_ci
+ *               - correo
+ *               - contraseña
+ *             properties:
+ *               nombres:
+ *                 type: string
+ *                 example: ""
+ *               apellidop:
+ *                 type: string
+ *                 example: ""
+ *               apellidom:
+ *                 type: string
+ *                 example: ""
+ *               carnet_ci:
+ *                 type: string
+ *                 example: ""
+ *               correo:
+ *                 type: string
+ *                 format: email
+ *                 example: ""
+ *               contraseña:
+ *                 type: string
+ *                 format: password
+ *                 example: ""
+ *     responses:
+ *       201:
+ *         description: Usuario MIGA creado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Usuario MIGA creado correctamente
+ *                 Usuario_defecto:
+ *                   type: string
+ *                   example: jperez
+ *       400:
+ *         description: Faltan campos obligatorios o el correo ya está registrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Faltan campos obligatorios
+ *       500:
+ *         description: Error del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Error al registrar usuario MIGA
+ *                 error:
+ *                   type: string
+ *                   example: Descripción del error interno
+ */
 router.post('/registro-miga', verificarToken, soloMIGA, registroMIGA);
 export default router;
 
