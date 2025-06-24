@@ -28,31 +28,27 @@ export async function register(req, res) {
     res.status(500).json({ mensaje: 'Error al registrar usuario' });
   }
 }
-
 export async function login(req, res) {
   try {
-    const { login, contraseña } = req.body;
+    const loginInput = req.body.login || req.body.correo || req.body.usuario_defecto;
+    const contraseña = req.body.contraseña;
 
-    if (!login || !contraseña) {
-      return res.status(400).json({ mensaje: 'Debe ingresar usuario/correo y contraseña' });
+    if (!loginInput || !contraseña) {
+      return res.status(400).json({ mensaje: 'Debe ingresar correo o usuario, y la contraseña' });
     }
 
     const [rows] = await db.query(`
       SELECT * FROM usuarios
       WHERE eliminado = FALSE AND (correo = ? OR Usuario_defecto = ?)
       LIMIT 1
-    `, [login, login]);
+    `, [loginInput, loginInput]);
 
     const usuario = rows[0];
 
-    if (!usuario) {
-      return res.status(404).json({ mensaje: 'Usuario no encontrado o fue eliminado' });
-    }
+    if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado o fue eliminado' });
 
     const match = await bcrypt.compare(contraseña, usuario.contraseña);
-    if (!match) {
-      return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
-    }
+    if (!match) return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
 
     const token = jwt.sign({ id: usuario.id, rol: usuario.rol }, process.env.JWT_SECRET, {
       expiresIn: '4h'
@@ -76,6 +72,7 @@ export async function login(req, res) {
     res.status(500).json({ mensaje: 'Error al iniciar sesión' });
   }
 }
+
 
 
 export function perfil(req, res) {
