@@ -71,3 +71,7 @@ export async function buscarUsuarioPorId(id) {
   const [rows] = await db.query('SELECT * FROM usuarios WHERE id = ?', [id]);
   return rows[0];
 }
+export async function buscarPorCorreo(correo) {
+  const [rows] = await db.query('SELECT * FROM usuarios WHERE correo = ? AND eliminado = FALSE', [correo]);
+  return rows[0];
+}

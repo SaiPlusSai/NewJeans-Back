@@ -153,16 +153,13 @@ export async function registroComunidad(req, res) {
       return res.status(400).json({ mensaje: 'Faltan campos obligatorios: nombres, apellidop, carnet_ci' });
     }
 
-   
     if (correo) {
       const existe = await buscarPorCorreo(correo);
       if (existe) return res.status(400).json({ mensaje: 'El correo ya está registrado' });
     }
 
-  
     const Usuario_defecto = await generarUsuarioDefecto(nombres, apellidop, apellidom);
 
-    
     const hash = await bcrypt.hash(carnet_ci, 10);
 
     await crearUsuario({
@@ -176,10 +173,44 @@ export async function registroComunidad(req, res) {
       Usuario_defecto
     });
 
-    res.status(201).json({ mensaje: `Usuario COMUNIDAD creado correctamente`, Usuario_defecto });
+    res.status(201).json({
+      mensaje: 'Usuario COMUNIDAD creado correctamente',
+      Usuario_defecto,
+      observacion: 'La contraseña por defecto es el número de carnet de identidad (CI)'
+    });
 
   } catch (error) {
     console.error("Error en registerComunidad:", error.message);
     res.status(500).json({ mensaje: 'Error al registrar usuario COMUNIDAD', error: error.message });
+  }
+}
+export async function cambiarContrasenia(req, res) {
+  try {
+    const { actual, nueva } = req.body;
+    const userId = req.usuario.id;
+
+    if (!actual || !nueva) {
+      return res.status(400).json({ mensaje: 'Debe proporcionar la contraseña actual y la nueva' });
+    }
+
+    const [rows] = await db.query('SELECT * FROM usuarios WHERE id = ? AND eliminado = FALSE', [userId]);
+    const usuario = rows[0];
+
+    if (!usuario) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    const match = await bcrypt.compare(actual, usuario.contraseña);
+    if (!match) {
+      return res.status(401).json({ mensaje: 'La contraseña actual es incorrecta' });
+    }
+
+    await editarUsuario(userId, { contraseña: nueva });
+
+    res.json({ mensaje: 'Contraseña actualizada correctamente' });
+
+  } catch (error) {
+    console.error('Error al cambiar contraseña:', error.message);
+    res.status(500).json({ mensaje: 'Error al cambiar contraseña', error: error.message });
   }
 }
