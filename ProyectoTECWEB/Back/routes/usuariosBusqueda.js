@@ -8,8 +8,10 @@ import { soloMIGA } from '../middleware/validarRol.js';
 
 const router = express.Router();
 
-router.get('/buscar-google', verificarToken, buscarUsuariosPorNombre);
 
-router.get('/buscar-identificador', verificarToken, buscarUsuarioPorIdentificadorController);
+router.get('/buscar-google', verificarToken, soloMIGA, buscarUsuariosPorNombre);
+
+
+router.get('/buscar-identificador', verificarToken, soloMIGA, buscarUsuarioPorIdentificadorController);
 
 export default router;
