@@ -14,8 +14,8 @@ import propuestasRoutes from './routes/propuestas.js';
 import propuestasPublicasRoutes from './routes/propuestasPublicas.js';
 import informacionRoutes from './routes/informacion.js';
 import usuariosMIGARoutes from './routes/usuariosMIGA.js';
-
-
+import favoritosBuscarRoutes from './routes/favoritosBuscar.js';
+import favoritosInteligenteRoutes from './routes/favoritosInteligente.js';
 const app = express();
 
 
@@ -33,6 +33,8 @@ app.use('/api/propuestas', propuestasRoutes);
 app.use('/api/propuestas/publicas', propuestasPublicasRoutes);
 app.use('/api/informacion', informacionRoutes);
 app.use('/api/usuarios-miga', usuariosMIGARoutes);
+app.use('/api/favoritos', favoritosBuscarRoutes);
+app.use('/api/favoritos-inteligente', favoritosInteligenteRoutes);
 export default app;
 
 // Servir la documentación de Swagger en una ruta
