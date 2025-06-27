@@ -271,10 +271,8 @@ router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
  *     summary: Registrar un nuevo usuario COMUNIDAD
  *     description: |
  *       Registra un nuevo usuario con rol "COMUNIDAD".
- *       Requiere token de autenticación. La contraseña por defecto será el número de CI encriptado.
+ *       La contraseña por defecto será el número de CI encriptado.
  *     tags: [Usuarios Actualización]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -301,11 +299,11 @@ router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
  *               correo:
  *                 type: string
  *                 format: email
- *                 example: 
+ *                 example: null
  *               contraseña:
  *                 type: string
  *                 format: password
- *                 example: 
+ *                 example: null
  *     responses:
  *       201:
  *         description: Usuario COMUNIDAD creado correctamente
@@ -347,7 +345,7 @@ router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
  *                   type: string
  *                   example: Descripción del error
  */
-router.post('/registro-comunidad',verificarToken, registroComunidad);
+router.post('/registro-comunidad', registroComunidad);
 
 router.post('/registro-google', registroGoogle);
 export default router;
