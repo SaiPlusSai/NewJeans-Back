@@ -203,6 +203,11 @@ export async function cambiarContrasenia(req, res) {
       return res.status(401).json({ mensaje: 'La contraseña actual es incorrecta' });
     }
 
+    const mismaContrasenia = await bcrypt.compare(nueva, usuario.contraseña);
+    if (mismaContrasenia) {
+      return res.status(400).json({ mensaje: 'La nueva contraseña no puede ser igual a la actual' });
+    }
+
     await editarUsuario(userId, { contraseña: nueva });
 
     res.json({ mensaje: 'Contraseña actualizada correctamente' });
