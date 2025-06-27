@@ -44,7 +44,7 @@ const router = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Propuesta'
+ *                 $ref: '#/components/schemas/Propuesta Buscar'
  *       400:
  *         description: Ninguna palabra/frase válida proporcionada
  *       500:
@@ -76,7 +76,7 @@ router.get('/buscar-titulo-descripcion', buscarPorTituloYDescripcionController);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Propuesta'
+ *                 $ref: '#/components/schemas/Propuesta Buscar'
  *       400:
  *         description: Estado inválido o no proporcionado
  *       500:
@@ -107,12 +107,50 @@ router.get('/buscar-estado', buscarPorEstadoController);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Propuesta'
+ *                 $ref: '#/components/schemas/Propuesta Buscar'
  *       400:
  *         description: Usuario no proporcionado
  *       500:
  *         description: Error interno del servidor
  */
 router.get('/buscar-usuario', buscarPorUsuarioController);
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Propuesta Buscar:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         titulo:
+ *           type: string
+ *           example: Implementación de tecnologías en aulas rurales
+ *         descripcion:
+ *           type: string
+ *           example: Propuesta para dotar de equipos tecnológicos a instituciones en zonas alejadas.
+ *         estado:
+ *           type: string
+ *           enum: [pendiente, aceptada, rechazada]
+ *           example: aceptada
+ *         enviada_en:
+ *           type: string
+ *           format: date-time
+ *           example: 2024-03-15T10:45:00Z
+ *         Usuario_defecto:
+ *           type: string
+ *           example: jperez
+ *         correo:
+ *           type: string
+ *           example: juan.perez@ejemplo.com
+ *         autor:
+ *           type: string
+ *           example: Juan Pérez Gómez
+ *         observacion_miga:
+ *           type: string
+ *           example: Cumple con lineamientos establecidos.
+ */
 
 export default router;
