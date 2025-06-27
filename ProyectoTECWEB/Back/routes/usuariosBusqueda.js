@@ -37,7 +37,7 @@ const router = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Usuario buscar'
+ *                 $ref: '#/components/schemas/Usuario'
  *       400:
  *         description: Frase no proporcionada
  *       500:
@@ -70,7 +70,7 @@ router.get('/buscar-google', verificarToken, buscarUsuariosPorNombre);
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Usuario Buscar'
+ *                 $ref: '#/components/schemas/Usuario'
  *       400:
  *         description: Valor no proporcionado
  *       500:
@@ -81,7 +81,7 @@ router.get('/buscar-identificador', verificarToken, buscarUsuarioPorIdentificado
  * @swagger
  * components:
  *   schemas:
- *     Usuario Buscar:
+ *     Usuario:
  *       type: object
  *       properties:
  *         id:
