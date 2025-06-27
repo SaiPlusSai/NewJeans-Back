@@ -20,11 +20,13 @@ export async function obtenerPropuestasPorUsuario(usuario_id) {
   return rows;
 }
 
-// Obtener TODAS las propuestas (solo MIGA)
 export async function obtenerTodasPropuestas() {
   const [rows] = await db.query(`
-    SELECT p.id, p.titulo, p.descripcion, p.estado, p.enviada_en,
-           u.nombres, u.apellidop, u.apellidom, p.observacion_miga
+    SELECT 
+      p.id, p.titulo, p.descripcion, p.estado, p.enviada_en,
+      u.nombres, u.apellidop, u.apellidom, 
+      u.Usuario_defecto, u.correo,
+      p.observacion_miga
     FROM propuestas p
     JOIN usuarios u ON p.usuario_id = u.id
     ORDER BY p.enviada_en DESC
@@ -43,13 +45,15 @@ export async function actualizarEstadoPropuesta(id, nuevoEstado, observacion) {
 }
 
 export async function obtenerPropuestasPublicasGenerales() {
-    const [rows] = await db.query(`
-      SELECT p.id, p.titulo, p.descripcion, p.estado, p.enviada_en,
-             CONCAT(u.nombres, ' ', u.apellidop) AS autor
-      FROM propuestas p
-      JOIN usuarios u ON p.usuario_id = u.id
-      WHERE p.estado IN ('pendiente', 'aceptada')
-      ORDER BY p.enviada_en DESC
-    `);
-    return rows;
-  }
+  const [rows] = await db.query(`
+    SELECT 
+      p.id, p.titulo, p.descripcion, p.estado, p.enviada_en,
+      CONCAT(u.nombres, ' ', u.apellidop) AS autor,
+      u.Usuario_defecto, u.correo
+    FROM propuestas p
+    JOIN usuarios u ON p.usuario_id = u.id
+    WHERE p.estado IN ('pendiente', 'aceptada')
+    ORDER BY p.enviada_en DESC
+  `);
+  return rows;
+}
