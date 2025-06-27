@@ -1,5 +1,5 @@
 import db from '../db.js';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 
 export async function crearUsuarioMIGA({ nombres, apellidop, apellidom, carnet_ci, correo, contraseña, Usuario_defecto = null }) {

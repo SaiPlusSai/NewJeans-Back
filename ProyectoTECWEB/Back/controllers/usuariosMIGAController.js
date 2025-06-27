@@ -1,7 +1,7 @@
 import { crearUsuarioMIGA, listarUsuariosMIGA,listarUsuarios, cambiarRolUsuario, eliminarLogicoUsuario,restaurarUsuario,listarUsuariosEliminados,buscarUsuarioPorId,buscarPorCorreo
 } from '../models/usuariosMIGA.js';
 import { generarUsuarioDefecto } from '../utils/usuario_defecto.js';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export async function registrarUsuarioMIGA(req, res) {
   try {
