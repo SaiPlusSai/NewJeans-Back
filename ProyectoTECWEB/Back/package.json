@@ -6,7 +6,7 @@
   "description": "",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js",
+    "start": "node app.js",
     "test": "jest"
   },
   "keywords": [],
