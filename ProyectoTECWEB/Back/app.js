@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
   res.send('Backend de MIIGA corriendo con éxito en Railway');
 });
 
+console.log('🌐 FRONTEND PERMITIDO:', process.env.URL_FRONTEND); // ✅ LOG ÚTIL
 
 app.use(cors({
   origin: process.env.URL_FRONTEND,
