@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv'; 
+dotenv.config(); 
+
 import usuariosRoutes from './routes/usuarios.js';
 import documentosRoutes from './routes/documentos.js';
 import swaggerSpec from './swagger.js';
@@ -18,13 +21,19 @@ import favoritosBuscarRoutes from './routes/favoritosBuscar.js';
 import favoritosInteligenteRoutes from './routes/favoritosInteligente.js';
 import propuestasBusquedaRoutes from './routes/propuestasBusqueda.js';
 import usuariosBusquedaRoutes from './routes/usuariosBusqueda.js';
+
 const app = express();
+
 app.get('/', (req, res) => {
   res.send('Backend de MIIGA corriendo con éxito en Railway');
 });
 
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.URL_FRONTEND,
+  credentials: true
+}));
+
 app.use(express.json()); // <--- ESTA LÍNEA ES VITAL
 app.use('/api/historial-busqueda', historialBuscarRoutes);
 app.use('/api/filtrado', documentosFiltradoRoutes);
