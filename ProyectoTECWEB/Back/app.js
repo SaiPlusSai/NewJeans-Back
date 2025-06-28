@@ -19,6 +19,9 @@ import favoritosInteligenteRoutes from './routes/favoritosInteligente.js';
 import propuestasBusquedaRoutes from './routes/propuestasBusqueda.js';
 import usuariosBusquedaRoutes from './routes/usuariosBusqueda.js';
 const app = express();
+app.get('/', (req, res) => {
+  res.send('Backend de MIIGA corriendo con éxito en Railway');
+});
 
 
 app.use(cors());
