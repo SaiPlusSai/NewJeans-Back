@@ -1,4 +1,4 @@
-export const sufijosPorTipo = {
+export const tipoEnumMap = {
   ley: "LEY",
   "ley suprema": "LEY",
 
@@ -7,7 +7,9 @@ export const sufijosPorTipo = {
 
   resolucion: "RES",
   "resolución": "RES",
+  "resolucion ministerial": "RES",
   "resolución ministerial": "RES",
+  "resolucion suprema": "RES",
   "resolución suprema": "RES",
 
   plan: "PLN",
@@ -26,8 +28,18 @@ export const sufijosPorTipo = {
   otro: "OTR",
   "otro documento": "OTR",
 
+  // NUEVOS
   estrategia: "EST",
-  CPE: "CPE",
+  "estrategia nacional": "EST",
+  "estrategía": "EST", // por si acaso
+
+  cpe: "CPE",
+  "CPE": "CPE",
+  "constitucion politica del estado": "CPE",
+  "constitución política del estado": "CPE",
+
   tratados_internacionales: "TI",
-  "tratados internacionales": "TI"
+  "tratados internacionales": "TI",
+  "tratado internacional": "TI",
+  "TI": "TI"
 };
