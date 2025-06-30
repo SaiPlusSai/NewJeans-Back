@@ -28,10 +28,9 @@ export const tipoEnumMap = {
   otro: "OTR",
   "otro documento": "OTR",
 
-  // NUEVOS
   estrategia: "EST",
   "estrategia nacional": "EST",
-  "estrategía": "EST", // por si acaso
+  "estrategía": "EST",
 
   cpe: "CPE",
   "CPE": "CPE",
