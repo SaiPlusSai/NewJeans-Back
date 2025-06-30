@@ -24,5 +24,10 @@ export const sufijosPorTipo = {
   "programa social": "PRG",
 
   otro: "OTR",
-  "otro documento": "OTR"
+  "otro documento": "OTR",
+
+  estrategia: "EST",
+  CPE: "CPE",
+  tratados_internacionales: "TI",
+  "tratados internacionales": "TI"
 };

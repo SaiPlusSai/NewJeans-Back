@@ -1,28 +1,33 @@
-export const tipoEnumMap = {
-  ley: "ley",
-  "ley suprema": "ley",
+export const sufijosPorTipo = {
+  ley: "LEY",
+  "ley suprema": "LEY",
 
-  decreto: "decreto",
-  "decreto supremo": "decreto",
+  decreto: "DEC",
+  "decreto supremo": "DEC",
 
-  resolucion: "resolucion",
-  "resolución": "resolucion",
-  "resolución ministerial": "resolucion",
-  "resolución suprema": "resolucion",
+  resolucion: "RES",
+  "resolución": "RES",
+  "resolución ministerial": "RES",
+  "resolución suprema": "RES",
 
-  plan: "plan",
-  "plan nacional": "plan",
+  plan: "PLN",
+  "plan nacional": "PLN",
 
-  norma: "norma",
-  normativa: "norma",
+  norma: "NOR",
+  normativa: "NOR",
 
-  resolucion_municipal: "resolucion_municipal",
-  "resolucion municipal": "resolucion_municipal",
-  "resolución municipal": "resolucion_municipal",
+  resolucion_municipal: "RSM",
+  "resolucion municipal": "RSM",
+  "resolución municipal": "RSM",
 
-  programa: "programa",
-  "programa social": "programa",
+  programa: "PRG",
+  "programa social": "PRG",
 
-  otro: "otro",
-  "otro documento": "otro"
+  otro: "OTR",
+  "otro documento": "OTR",
+
+  estrategia: "EST",
+  CPE: "CPE",
+  tratados_internacionales: "TI",
+  "tratados internacionales": "TI"
 };
