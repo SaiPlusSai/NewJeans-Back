@@ -1,44 +1,29 @@
 export const tipoEnumMap = {
-  ley: "LEY",
-  "ley suprema": "LEY",
+  ley: "ley",
+  "ley suprema": "ley",
 
-  decreto: "DEC",
-  "decreto supremo": "DEC",
+  decreto: "decreto",
+  "decreto supremo": "decreto",
 
-  resolucion: "RES",
-  "resolución": "RES",
-  "resolucion ministerial": "RES",
-  "resolución ministerial": "RES",
-  "resolucion suprema": "RES",
-  "resolución suprema": "RES",
+  resolucion: "resolucion",
+  "resolución": "resolucion",
+  "resolución ministerial": "resolucion",
+  "resolución suprema": "resolucion",
 
-  plan: "PLN",
-  "plan nacional": "PLN",
+  plan: "plan",
+  "plan nacional": "plan",
 
-  norma: "NOR",
-  normativa: "NOR",
+  norma: "norma",
+  normativa: "norma",
 
-  resolucion_municipal: "RSM",
-  "resolucion municipal": "RSM",
-  "resolución municipal": "RSM",
+  resolucion_municipal: "resolucion_municipal",
+  "resolucion municipal": "resolucion_municipal",
+  "resolución municipal": "resolucion_municipal",
+  "resolución municipal": "Resolucion_Municipal",
 
-  programa: "PRG",
-  "programa social": "PRG",
+  programa: "programa",
+  "programa social": "programa",
 
-  otro: "OTR",
-  "otro documento": "OTR",
-
-  estrategia: "EST",
-  "estrategia nacional": "EST",
-  "estrategía": "EST",
-
-  cpe: "CPE",
-  "CPE": "CPE",
-  "constitucion politica del estado": "CPE",
-  "constitución política del estado": "CPE",
-
-  tratados_internacionales: "TI",
-  "tratados internacionales": "TI",
-  "tratado internacional": "TI",
-  "TI": "TI"
+  otro: "otro",
+  "otro documento": "otro"
 };
