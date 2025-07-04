@@ -18,6 +18,9 @@ import favoritosBuscarRoutes from './routes/favoritosBuscar.js';
 import favoritosInteligenteRoutes from './routes/favoritosInteligente.js';
 import propuestasBusquedaRoutes from './routes/propuestasBusqueda.js';
 import usuariosBusquedaRoutes from './routes/usuariosBusqueda.js';
+import macrodistritoRoutes from './routes/macrodistrito.js';
+import zonaRoutes from './routes/zonas.js';
+import ambitoActividadRoutes from './routes/ambitoActividad.js';
 const app = express();
 
 
@@ -39,6 +42,9 @@ app.use('/api/favoritos', favoritosBuscarRoutes);
 app.use('/api/favoritos-inteligente', favoritosInteligenteRoutes);
 app.use('/api/propuestas-inteligente', propuestasBusquedaRoutes);
 app.use('/api/usuarios', usuariosBusquedaRoutes);
+app.use('/api', macrodistritoRoutes);
+app.use('/api', zonaRoutes);
+app.use('/api', ambitoActividadRoutes);
 export default app;
 
 // Servir la documentación de Swagger en una ruta
