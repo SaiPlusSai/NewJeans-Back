@@ -16,9 +16,7 @@ export async function registrarDocumento(req, res) {
 
     const camposObligatorios = [
       'codigo', 'tipo', 'fuente', 'descripcion', 'relevancia',
-      'anio', 'enlace', 'aplicacion_id', 'conceptos_cpe', 'jerarquia',
-      'macrodistrito_id', // Campo agregado
-      'ambitoactividad_id' // Campo agregado
+      'anio', 'enlace', 'aplicacion_id', 'conceptos_cpe', 'jerarquia'
     ];
 
     for (const campo of camposObligatorios) {
@@ -62,11 +60,6 @@ export async function actualizarDocumento(req, res) {
     const { codigo } = req.params;
     const data = req.body;
 
-    // Verificar si los nuevos campos son parte de los datos
-    if (!data.macrodistrito_id || !data.ambitoactividad_id) {
-      return res.status(400).json({ mensaje: 'Faltan los campos macrodistrito_id o ambitoactividad_id' });
-    }
-
     await editarDocumento(codigo, data);
     res.json({ mensaje: 'Documento actualizado' });
   } catch (error) {
@@ -96,7 +89,6 @@ export async function restaurarDoc(req, res) {
     res.status(500).json({ mensaje: 'Error al restaurar documento' });
   }
 }
-
 export async function generarCodigo(req, res) {
   try {
     const { tipo } = req.query;
@@ -119,7 +111,6 @@ export async function registrarDocumentoAuto(req, res) {
     const data = req.body;
     data.creado_por = req.usuario.id;
 
-    // Verificación del tipo
     if (!data.tipo) {
       console.warn("⚠️ Falta el tipo para generar el código");
       return res.status(400).json({ mensaje: "Falta el tipo para generar el código" });
@@ -134,16 +125,13 @@ export async function registrarDocumentoAuto(req, res) {
 
     console.log("📨 [AUTO] Tipo normalizado para código:", data.tipo);
 
-    // Generación del código
     data.codigo = await generarCodigoPorTipo(data.tipo);
 
     console.log("✅ [AUTO] Código generado:", data.codigo);
 
-    // Campos obligatorios
     const camposObligatorios = [
       'tipo', 'fuente', 'descripcion', 'relevancia',
-      'anio', 'enlace', 'aplicacion_id', 'conceptos_cpe', 'jerarquia',
-      'macrodistrito_id', 'ambitoactividad_id' // Campos nuevos
+      'anio', 'enlace', 'aplicacion_id', 'conceptos_cpe', 'jerarquia'
     ];
 
     for (const campo of camposObligatorios) {
@@ -169,6 +157,7 @@ export async function registrarDocumentoAuto(req, res) {
     });
   }
 }
+
 
 export async function obtenerDocumentosEliminados(req, res) {
   try {
