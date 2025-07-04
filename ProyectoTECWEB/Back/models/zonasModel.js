@@ -30,3 +30,10 @@ export async function eliminarZona(id) {
   const resultado = await db.query('UPDATE zonas_macrodistrito SET eliminado = 1 WHERE id = ?', [id]);
   return resultado;
 }
+export async function zonaExiste(macrodistrito_id, nombre) {
+  const [filas] = await db.query(
+    'SELECT * FROM zonas_macrodistrito WHERE macrodistrito_id = ? AND nombre_zona = ? AND eliminado = 0',
+    [macrodistrito_id, nombre]
+  );
+  return filas.length > 0;
+}
