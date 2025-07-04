@@ -41,13 +41,21 @@ export async function obtenerZonasPorMacrodistrito(req, res) {
 // Crear una nueva zona
 export async function crearZona(req, res) {
   const { macrodistrito_id, nombre } = req.body;
+
   try {
+    // Validar si ya existe una zona con ese nombre en el mismo macrodistrito
+    const existe = await zonasModel.zonaExiste(macrodistrito_id, nombre);
+    if (existe) {
+      return res.status(400).json({ mensaje: 'Ya existe una zona con ese nombre en el macrodistrito' });
+    }
+
     await zonasModel.crearZona(macrodistrito_id, nombre);
     res.status(201).json({ mensaje: 'Zona creada exitosamente' });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al crear la zona', error: error.message });
   }
 }
+
 
 // Actualizar una zona
 export async function actualizarZona(req, res) {
