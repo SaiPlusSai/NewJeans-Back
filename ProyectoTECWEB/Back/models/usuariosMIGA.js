@@ -18,7 +18,7 @@ export async function crearUsuarioMIGA(data) {
   // Verificar si la zona está asociada al macrodistrito
   const [zonaValida] = await db.query(`
     SELECT id 
-    FROM zonas 
+    FROM zonas_macrodistrito 
     WHERE macrodistrito_id = ? AND id = ?
   `, [macrodistrito_id, zona_id]);
 
@@ -45,12 +45,12 @@ export async function listarUsuariosMIGA() {
   const [rows] = await db.query(`
     SELECT 
       u.id, u.nombres, u.apellidop, u.apellidom, u.carnet_ci, u.correo, u.Usuario_defecto, 
-      m.nombre AS macrodistrito_nombre, a.nombre AS ambito_nombre, a.descripcion AS ambito_descripcion, 
+      m.nombre AS macrodistrito_nombre, a.nombre AS ambito_nombre, 
       z.nombre_zona, u.creado_en
     FROM usuarios u
     LEFT JOIN macrodistritos m ON u.macrodistrito_id = m.id
-    LEFT JOIN ambito_actividad a ON u.ambitoactividad_id = a.id
-    LEFT JOIN zonas z ON u.zona_id = z.id
+    LEFT JOIN ambitoactividad a ON u.ambitoactividad_id = a.id  -- Se dejó solo el nombre de ambitoactividad
+    LEFT JOIN zonas_macrodistrito z ON u.zona_id = z.id
     WHERE u.rol = 'MIGA' AND u.eliminado = 0
     ORDER BY u.creado_en DESC
   `);
@@ -62,12 +62,12 @@ export async function listarUsuarios() {
   const [rows] = await db.query(`
     SELECT 
       u.id, u.nombres, u.apellidop, u.apellidom, u.carnet_ci, u.correo, u.rol, u.Usuario_defecto,
-      m.nombre AS macrodistrito_nombre, a.nombre AS ambito_nombre, a.descripcion AS ambito_descripcion, 
+      m.nombre AS macrodistrito_nombre, a.nombre AS ambito_nombre, 
       z.nombre_zona, u.creado_en
     FROM usuarios u
     LEFT JOIN macrodistritos m ON u.macrodistrito_id = m.id
-    LEFT JOIN ambito_actividad a ON u.ambitoactividad_id = a.id
-    LEFT JOIN zonas z ON u.zona_id = z.id
+    LEFT JOIN ambitoactividad a ON u.ambitoactividad_id = a.id  -- Se dejó solo el nombre de ambitoactividad
+    LEFT JOIN zonas_macrodistrito z ON u.zona_id = z.id
     WHERE u.eliminado = 0
     ORDER BY u.creado_en DESC
   `);
@@ -84,14 +84,14 @@ export async function cambiarRolUsuario(id, nuevoRol) {
 // Eliminación lógica (marcar como eliminado)
 export async function eliminarLogicoUsuario(id) {
   await db.query(`
-    UPDATE usuarios SET eliminado = 1 WHERE id = ?
+    UPDATE usuarios SET eliminado = 1 WHERE id = ? 
   `, [id]);
 }
 
 // Restaurar usuario eliminado
 export async function restaurarUsuario(id) {
   await db.query(`
-    UPDATE usuarios SET eliminado = 0 WHERE id = ?
+    UPDATE usuarios SET eliminado = 0 WHERE id = ? 
   `, [id]);
 }
 
@@ -100,12 +100,12 @@ export async function listarUsuariosEliminados() {
   const [rows] = await db.query(`
     SELECT 
       u.id, u.nombres, u.apellidop, u.apellidom, u.carnet_ci, u.correo, u.rol, u.Usuario_defecto, 
-      m.nombre AS macrodistrito_nombre, a.nombre AS ambito_nombre, a.descripcion AS ambito_descripcion, 
+      m.nombre AS macrodistrito_nombre, a.nombre AS ambito_nombre, 
       z.nombre_zona, u.creado_en
     FROM usuarios u
     LEFT JOIN macrodistritos m ON u.macrodistrito_id = m.id
-    LEFT JOIN ambito_actividad a ON u.ambitoactividad_id = a.id
-    LEFT JOIN zonas z ON u.zona_id = z.id
+    LEFT JOIN ambitoactividad a ON u.ambitoactividad_id = a.id  -- Se dejó solo el nombre de ambitoactividad
+    LEFT JOIN zonas_macrodistrito z ON u.zona_id = z.id
     WHERE u.eliminado = 1
     ORDER BY u.creado_en DESC
   `);

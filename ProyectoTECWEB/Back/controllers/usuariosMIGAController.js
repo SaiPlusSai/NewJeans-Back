@@ -1,3 +1,4 @@
+import db from '../db.js';
 import { 
   crearUsuarioMIGA, 
   listarUsuariosMIGA, 
@@ -16,16 +17,18 @@ export async function registrarUsuarioMIGA(req, res) {
   try {
     const { nombres, apellidop, apellidom, correo, contraseña, macrodistrito_id, ambitoactividad_id, zona_id } = req.body;
 
+    // Validar que todos los campos requeridos estén presentes
     if (!nombres || !apellidop || !correo || !contraseña || !macrodistrito_id || !ambitoactividad_id || !zona_id) {
       return res.status(400).json({ mensaje: "Faltan campos obligatorios" });
     }
 
+    // Encriptar la contraseña
     const hash = await bcrypt.hash(contraseña, 10); 
 
     // Verificar si la zona está asociada al macrodistrito
     const [zonaValida] = await db.query(`
       SELECT id 
-      FROM zonas 
+      FROM zonas_macrodistrito 
       WHERE macrodistrito_id = ? AND id = ?
     `, [macrodistrito_id, zona_id]);
 
@@ -33,6 +36,7 @@ export async function registrarUsuarioMIGA(req, res) {
       return res.status(400).json({ mensaje: "La zona no está asociada al macrodistrito especificado." });
     }
 
+    // Crear el usuario MIGA con los datos proporcionados
     await crearUsuarioMIGA({ nombres, apellidop, apellidom, correo, contraseña: hash, macrodistrito_id, ambitoactividad_id, zona_id });
 
     res.status(201).json({ mensaje: "Usuario MIGA creado correctamente" });
@@ -138,14 +142,20 @@ export async function obtenerUsuariosEliminados(req, res) {
 export async function registroMIGA(req, res) {
   try {
     const { nombres, apellidop, apellidom, carnet_ci, correo, contraseña, macrodistrito_id, ambitoactividad_id, zona_id } = req.body;
+    
     if (!nombres || !apellidop || !carnet_ci || !correo || !contraseña || !macrodistrito_id || !ambitoactividad_id || !zona_id) {
       return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
     }
+
     const usuarioExistente = await buscarPorCorreo(correo);
     if (usuarioExistente) {
       return res.status(400).json({ mensaje: 'El correo ya está registrado' });
     }
+
+    // Generar usuario por defecto
     const Usuario_defecto = await generarUsuarioDefecto(nombres, apellidop, apellidom);
+    
+    // Encriptar la contraseña
     const hash = await bcrypt.hash(contraseña, 10);
 
     await crearUsuarioMIGA({
