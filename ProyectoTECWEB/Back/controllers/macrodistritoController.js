@@ -1,6 +1,5 @@
 import * as macrodistritoModel from '../models/macrodistritoModel.js';
 
-// Obtener todos los macrodistritos
 export async function obtenerMacrodistritos(req, res) {
   try {
     const macrodistritos = await macrodistritoModel.obtenerTodosMacrodistritos();
@@ -10,7 +9,6 @@ export async function obtenerMacrodistritos(req, res) {
   }
 }
 
-// Obtener un macrodistrito por ID
 export async function obtenerMacrodistrito(req, res) {
   const { id } = req.params;
   try {
@@ -24,30 +22,36 @@ export async function obtenerMacrodistrito(req, res) {
   }
 }
 
-// Crear un nuevo macrodistrito
 export async function crearMacrodistrito(req, res) {
-  const { nombre } = req.body;
+  const { nombre, descripcion } = req.body; // Ahora incluye descripcion
   try {
-    await macrodistritoModel.crearMacrodistrito(nombre);
+    // Verificación de campos obligatorios
+    if (!nombre || !descripcion) {
+      return res.status(400).json({ mensaje: 'Faltan campos obligatorios: nombre y descripcion' });
+    }
+
+    await macrodistritoModel.crearMacrodistrito(nombre, descripcion);
     res.status(201).json({ mensaje: 'Macrodistrito creado exitosamente' });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al crear el macrodistrito', error: error.message });
   }
 }
 
-// Actualizar un macrodistrito
 export async function actualizarMacrodistrito(req, res) {
   const { id } = req.params;
-  const { nombre } = req.body;
+  const { nombre, descripcion } = req.body; // Ahora incluye descripcion
   try {
-    await macrodistritoModel.actualizarMacrodistrito(id, nombre);
+    if (!nombre || !descripcion) {
+      return res.status(400).json({ mensaje: 'Faltan campos obligatorios: nombre y descripcion' });
+    }
+
+    await macrodistritoModel.actualizarMacrodistrito(id, nombre, descripcion);
     res.json({ mensaje: 'Macrodistrito actualizado exitosamente' });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al actualizar el macrodistrito', error: error.message });
   }
 }
 
-// Eliminar un macrodistrito
 export async function eliminarMacrodistrito(req, res) {
   const { id } = req.params;
   try {
