@@ -1,5 +1,6 @@
 import db from '../db.js';
 import { sufijosPorTipo } from '../utils/sufijos.js';
+
 // Crear un documento nuevo
 export async function crearDocumento(data) {
   const {
@@ -13,32 +14,37 @@ export async function crearDocumento(data) {
     aplicacion_id,
     conceptos_cpe,
     jerarquia,
-    creado_por
+    creado_por,
+    macrodistrito_id, // Campo actualizado
+    ambitoactividad_id // Campo actualizado
   } = data;
 
   const sql = `
     INSERT INTO documentos (
       codigo, tipo, fuente, descripcion, relevancia,
       anio, enlace, aplicacion_id, conceptos_cpe,
-      jerarquia, vigente, creado_por
+      jerarquia, vigente, creado_por, macrodistrito_id, ambitoactividad_id
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE, ?, ?)
   `;
 
   await db.query(sql, [
     codigo, tipo, fuente, descripcion, relevancia,
     anio, enlace, aplicacion_id, conceptos_cpe,
-    jerarquia, creado_por
+    jerarquia, creado_por, macrodistrito_id, ambitoactividad_id
   ]);
 }
 
 // Listar todos los documentos vigentes
 export async function listarDocumentos() {
   const [rows] = await db.query(`
-    SELECT d.*, a.tipo AS aplicacion, u.nombres AS creado_por_nombre
+    SELECT d.*, a.tipo AS aplicacion, u.nombres AS creado_por_nombre, 
+      m.nombre AS macrodistrito, aa.nombre AS ambito_actividad
     FROM documentos d
     JOIN aplicacion a ON d.aplicacion_id = a.id
     JOIN usuarios u ON d.creado_por = u.id
+    LEFT JOIN macrodistritos m ON d.macrodistrito_id = m.id
+    LEFT JOIN ambitoactividad aa ON d.ambitoactividad_id = aa.id
     WHERE d.vigente = TRUE
     ORDER BY d.anio DESC
   `);
@@ -60,19 +66,23 @@ export async function editarDocumento(codigo, data) {
     enlace,
     aplicacion_id,
     conceptos_cpe,
-    jerarquia
+    jerarquia,
+    macrodistrito_id, // Campo actualizado
+    ambitoactividad_id // Campo actualizado
   } = data;
 
   const sql = `
     UPDATE documentos
     SET descripcion = ?, relevancia = ?, anio = ?, enlace = ?,
-        aplicacion_id = ?, conceptos_cpe = ?, jerarquia = ?
+        aplicacion_id = ?, conceptos_cpe = ?, jerarquia = ?, 
+        macrodistrito_id = ?, ambitoactividad_id = ?
     WHERE codigo = ?
   `;
 
   await db.query(sql, [
     descripcion, relevancia, anio, enlace,
-    aplicacion_id, conceptos_cpe, jerarquia, codigo
+    aplicacion_id, conceptos_cpe, jerarquia, 
+    macrodistrito_id, ambitoactividad_id, codigo
   ]);
 }
 
@@ -81,11 +91,12 @@ export async function marcarNoVigente(codigo) {
   await db.query('UPDATE documentos SET vigente = FALSE WHERE codigo = ?', [codigo]);
 }
 
-// Restaurar
+// Restaurar documento
 export async function restaurarDocumento(codigo) {
   await db.query('UPDATE documentos SET vigente = TRUE WHERE codigo = ?', [codigo]);
 }
 
+// Generar código por tipo
 export async function generarCodigoPorTipo(tipo) {
   const tipoNormalizado = tipo?.toLowerCase();
   const sufijo = sufijosPorTipo[tipoNormalizado];
@@ -112,17 +123,17 @@ export async function generarCodigoPorTipo(tipo) {
   return `${sufijo}-${String(siguiente).padStart(3, '0')}`;
 }
 
-
 export async function listarDocumentosEliminados() {
   const [rows] = await db.query(`
-    SELECT d.*, a.tipo AS aplicacion, u.nombres AS creado_por_nombre
+    SELECT d.*, a.tipo AS aplicacion, u.nombres AS creado_por_nombre, 
+      m.nombre AS macrodistrito, aa.nombre AS ambito_actividad
     FROM documentos d
     JOIN aplicacion a ON d.aplicacion_id = a.id
     JOIN usuarios u ON d.creado_por = u.id
+    LEFT JOIN macrodistritos m ON d.macrodistrito_id = m.id
+    LEFT JOIN ambitoactividad aa ON d.ambitoactividad_id = aa.id
     WHERE d.vigente = FALSE
     ORDER BY d.anio DESC
   `);
   return rows;
 }
-
-
