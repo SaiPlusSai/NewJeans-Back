@@ -1,19 +1,39 @@
-import { crearUsuarioMIGA, listarUsuariosMIGA,listarUsuarios, cambiarRolUsuario, eliminarLogicoUsuario,restaurarUsuario,listarUsuariosEliminados,buscarUsuarioPorId,buscarPorCorreo
+import { 
+  crearUsuarioMIGA, 
+  listarUsuariosMIGA, 
+  listarUsuarios, 
+  cambiarRolUsuario, 
+  eliminarLogicoUsuario, 
+  restaurarUsuario, 
+  listarUsuariosEliminados, 
+  buscarUsuarioPorId, 
+  buscarPorCorreo 
 } from '../models/usuariosMIGA.js';
 import { generarUsuarioDefecto } from '../utils/usuario_defecto.js';
 import bcrypt from 'bcryptjs';
 
 export async function registrarUsuarioMIGA(req, res) {
   try {
-    const { nombres, apellidop, apellidom, correo, contraseña } = req.body;
+    const { nombres, apellidop, apellidom, correo, contraseña, macrodistrito_id, ambitoactividad_id, zona_id } = req.body;
 
-    if (!nombres || !apellidop || !correo || !contraseña) {
+    if (!nombres || !apellidop || !correo || !contraseña || !macrodistrito_id || !ambitoactividad_id || !zona_id) {
       return res.status(400).json({ mensaje: "Faltan campos obligatorios" });
     }
 
     const hash = await bcrypt.hash(contraseña, 10); 
 
-    await crearUsuarioMIGA({ nombres, apellidop, apellidom, correo, contraseña: hash });
+    // Verificar si la zona está asociada al macrodistrito
+    const [zonaValida] = await db.query(`
+      SELECT id 
+      FROM zonas 
+      WHERE macrodistrito_id = ? AND id = ?
+    `, [macrodistrito_id, zona_id]);
+
+    if (!zonaValida || zonaValida.length === 0) {
+      return res.status(400).json({ mensaje: "La zona no está asociada al macrodistrito especificado." });
+    }
+
+    await crearUsuarioMIGA({ nombres, apellidop, apellidom, correo, contraseña: hash, macrodistrito_id, ambitoactividad_id, zona_id });
 
     res.status(201).json({ mensaje: "Usuario MIGA creado correctamente" });
   } catch (error) {
@@ -21,6 +41,7 @@ export async function registrarUsuarioMIGA(req, res) {
     res.status(500).json({ mensaje: "Error al crear usuario MIGA", error: error.message });
   }
 }
+
 export async function obtenerUsuariosMIGA(req, res) {
   try {
     const usuarios = await listarUsuariosMIGA();
@@ -103,6 +124,7 @@ export async function restaurarUsuarioEliminado(req, res) {
     res.status(500).json({ mensaje: 'Error al restaurar usuario' });
   }
 }
+
 export async function obtenerUsuariosEliminados(req, res) {
   try {
     const usuarios = await listarUsuariosEliminados();
@@ -115,8 +137,8 @@ export async function obtenerUsuariosEliminados(req, res) {
 
 export async function registroMIGA(req, res) {
   try {
-    const { nombres, apellidop, apellidom, carnet_ci, correo, contraseña } = req.body;
-    if (!nombres || !apellidop || !carnet_ci || !correo || !contraseña) {
+    const { nombres, apellidop, apellidom, carnet_ci, correo, contraseña, macrodistrito_id, ambitoactividad_id, zona_id } = req.body;
+    if (!nombres || !apellidop || !carnet_ci || !correo || !contraseña || !macrodistrito_id || !ambitoactividad_id || !zona_id) {
       return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
     }
     const usuarioExistente = await buscarPorCorreo(correo);
@@ -133,7 +155,10 @@ export async function registroMIGA(req, res) {
       carnet_ci,
       correo,
       contraseña: hash,
-      Usuario_defecto
+      Usuario_defecto,
+      macrodistrito_id,
+      ambitoactividad_id,
+      zona_id
     });
 
     res.status(201).json({
