@@ -1,22 +1,20 @@
+import express from 'express';
+import { login, register, perfil,registroGoogle,actualizarUsuarioGeneral,registroComunidad,cambiarContrasenia} from '../controllers/usuariosController.js';
+import { verificarToken } from '../middleware/auth.js';
+
+const router = express.Router();
 /**
  * @swagger
  * tags:
  *   name: Usuarios
  *   description: Gestión de autenticación de usuarios
  */
-
-import express from 'express';
-import { login, register, perfil,registroGoogle,actualizarUsuarioGeneral,registroComunidad,cambiarContrasenia} from '../controllers/usuariosController.js';
-import { verificarToken } from '../middleware/auth.js';
-
-const router = express.Router();
-
 /**
  * @swagger
  * /api/usuarios/register:
  *   post:
- *     summary: Registrar un nuevo usuario
- *     description: Crea una nueva cuenta de usuario.
+ *     summary: Registrar usuario (rol COMUNIDAD o especificado)
+ *     description: Registra un nuevo usuario. Si no se especifica el rol, por defecto será "COMUNIDAD".
  *     tags: [Usuarios]
  *     requestBody:
  *       required: true
@@ -24,40 +22,42 @@ const router = express.Router();
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - nombres
- *               - apellidop
- *               - apellidom  
- *               - correo
- *               - contraseña
- *               - rol
+ *             required: [nombres, correo, contraseña]
  *             properties:
  *               nombres:
  *                 type: string
+ *                 example: Juan
  *               apellidop:
  *                 type: string
+ *                 example: Pérez
  *               apellidom:
  *                 type: string
+ *                 example: López
  *               correo:
  *                 type: string
+ *                 example: juanperez@example.com
  *               contraseña:
  *                 type: string
+ *                 example: Secreto123
+ *               rol:
+ *                 type: string
+ *                 enum: [MIGA, COMUNIDAD]
+ *                 example: COMUNIDAD
  *     responses:
  *       201:
- *         description: Usuario registrado exitosamente.
+ *         description: Usuario creado correctamente
  *       400:
- *         description: Datos de entrada inválidos o usuario ya existe.
+ *         description: Campos obligatorios faltantes o correo duplicado
  *       500:
- *         description: Error en el servidor.
+ *         description: Error al registrar usuario
  */
 router.post('/register', register);
-
 /**
  * @swagger
  * /api/usuarios/login:
  *   post:
- *     summary: Iniciar sesión
- *     description: Inicia sesión con las credenciales del usuario.
+ *     summary: Login de usuario
+ *     description: Permite iniciar sesión usando correo o usuario_defecto con la contraseña. Retorna un token JWT.
  *     tags: [Usuarios]
  *     requestBody:
  *       required: true
@@ -65,162 +65,50 @@ router.post('/register', register);
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - correo
- *               - contraseña
+ *             required: [login, contraseña]
  *             properties:
- *               correo:
+ *               login:
  *                 type: string
+ *                 description: Puede ser correo o Usuario_defecto
+ *                 example: juanperez@example.com
  *               contraseña:
  *                 type: string
+ *                 example: Secreto123
  *     responses:
  *       200:
- *         description: Inicio de sesión exitoso, devuelve un token de acceso.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
+ *         description: Login exitoso con token
+ *       400:
+ *         description: Datos incompletos
  *       401:
- *         description: Credenciales inválidas o usuario no encontrado.
+ *         description: Contraseña incorrecta
+ *       404:
+ *         description: Usuario no encontrado
  *       500:
- *         description: Error en el servidor.
+ *         description: Error al iniciar sesión
  */
 router.post('/login', login);
-
 /**
  * @swagger
  * /api/usuarios/perfil:
  *   get:
- *     summary: Obtener perfil del usuario
- *     description: Obtiene la información del perfil del usuario autenticado.
+ *     summary: Obtener perfil del usuario autenticado
+ *     description: Devuelve los datos del usuario según el token proporcionado.
  *     tags: [Usuarios]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Perfil del usuario obtenido exitosamente.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 nombre:
- *                   type: string
- *                 correo:
- *                   type: string
+ *         description: Token válido, retorna datos del usuario
  *       401:
- *         description: No autorizado, token inválido o no proporcionado.
- *       404:
- *         description: Usuario no encontrado.
- *       500:
- *         description: Error en el servidor.
- */
-
-/**
- * @swagger
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
+ *         description: Token inválido o ausente
  */
 router.get('/perfil', verificarToken, perfil);
 /**
  * @swagger
- * /api/usuarios/cambiar-contrasenia:
- *   patch:
- *     summary: Cambiar contraseña del usuario actual
- *     description: |
- *       Permite a un usuario autenticado actualizar su contraseña.
- *       Requiere token válido. Verifica la contraseña actual antes de aplicar el cambio.
- *     tags: [Usuarios Actualización]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - actual
- *               - nueva
- *             properties:
- *               actual:
- *                 type: string
- *                 format: password
- *                 example: contraseniaAnterior123
- *               nueva:
- *                 type: string
- *                 format: password
- *                 example: nuevaContrasenia456
- *     responses:
- *       200:
- *         description: Contraseña actualizada correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
- *                   example: Contraseña actualizada correctamente
- *       400:
- *         description: Faltan campos requeridos
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
- *                   example: Debe proporcionar la contraseña actual y la nueva
- *       401:
- *         description: Contraseña actual incorrecta
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
- *                   example: La contraseña actual es incorrecta
- *       404:
- *         description: Usuario no encontrado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
- *                   example: Usuario no encontrado
- *       500:
- *         description: Error del servidor
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
- *                   example: Error al cambiar contraseña
- *                 error:
- *                   type: string
- *                   example: Descripción técnica del error
- */
-router.patch('/cambiar-contrasenia', verificarToken, cambiarContrasenia);
-/**
- * @swagger
  * /api/usuarios/{id}:
  *   patch:
- *     summary: Editar datos generales de un usuario
+ *     summary: Editar datos generales del usuario
+ *     description: Permite actualizar datos básicos del usuario. No se permite cambiar rol ni eliminado.
  *     tags: [Usuarios]
  *     security:
  *       - bearerAuth: []
@@ -228,50 +116,79 @@ router.patch('/cambiar-contrasenia', verificarToken, cambiarContrasenia);
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del usuario a editar
  *         schema:
  *           type: integer
+ *         description: ID del usuario
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             properties:
- *               nombres:
- *                 type: string
- *               apellidop:
- *                 type: string
- *               apellidom:
- *                 type: string
- *               correo:
- *                 type: string
- *                 format: email
- *               contraseña:
- *                 type: string
  *             example:
- *               nombres: ""
- *               apellidop: "" 
- *               apellidom:  ""
- *               correo:  ""
- *               contraseña: ""  
+ *               nombres: Juan actualizado
+ *               apellidop: Pérez
+ *               correo: nuevo@mail.com
+ *               macrodistrito_id: 1
+ *               ambitoactividad_id: 2
+ *               zona_id: 3
  *     responses:
  *       200:
  *         description: Usuario actualizado correctamente
  *       403:
- *         description: No se permite modificar el rol ni el estado eliminado
+ *         description: Intento de modificar campos no permitidos
  *       500:
  *         description: Error al actualizar usuario
  */
 router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
 /**
  * @swagger
+ * tags:
+ *   name: Usuarios Actualización
+ *   description: Gestión de autenticación de usuarios en lo ultimo
+ */
+/**
+ * @swagger
+ * /api/usuarios/cambiar-contrasenia:
+ *   patch:
+ *     summary: Cambiar contraseña del usuario autenticado
+ *     description: Cambia la contraseña del usuario verificando la contraseña actual.
+ *     tags: [Usuarios Actualización]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [actual, nueva]
+ *             properties:
+ *               actual:
+ *                 type: string
+ *                 example: ContraseñaActual123
+ *               nueva:
+ *                 type: string
+ *                 example: NuevaContraseña456
+ *     responses:
+ *       200:
+ *         description: Contraseña actualizada correctamente
+ *       400:
+ *         description: Datos faltantes o nueva contraseña igual a la actual
+ *       401:
+ *         description: Contraseña actual incorrecta
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error al cambiar contraseña
+ */
+router.patch('/cambiar-contrasenia', verificarToken, cambiarContrasenia);
+/**
+ * @swagger
  * /api/usuarios/registro-comunidad:
  *   post:
- *     summary: Registrar un nuevo usuario COMUNIDAD
- *     description: |
- *       Registra un nuevo usuario con rol "COMUNIDAD".
- *       La contraseña por defecto será el número de CI encriptado.
+ *     summary: Registro rápido de usuario COMUNIDAD
+ *     description: Registra un usuario del tipo COMUNIDAD generando un Usuario_defecto automáticamente. La contraseña inicial es el carnet_ci.
  *     tags: [Usuarios Actualización]
  *     requestBody:
  *       required: true
@@ -279,71 +196,39 @@ router.patch('/:id', verificarToken, actualizarUsuarioGeneral);
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - nombres
- *               - apellidop
- *               - carnet_ci
+ *             required: [nombres, apellidop, carnet_ci]
  *             properties:
  *               nombres:
  *                 type: string
- *                 example: ""
+ *                 example: Carlos
  *               apellidop:
  *                 type: string
- *                 example: ""
+ *                 example: Quiroga
  *               apellidom:
  *                 type: string
- *                 example: ""
+ *                 example: Reyes
  *               carnet_ci:
  *                 type: string
- *                 example: ""
+ *                 example: 98456123
  *               correo:
  *                 type: string
- *                 format: email
- *                 example: null
- *               contraseña:
- *                 type: string
- *                 format: password
- *                 example: null
+ *                 example: carlos@mail.com
+ *               macrodistrito_id:
+ *                 type: integer
+ *                 example: 2
+ *               ambitoactividad_id:
+ *                 type: integer
+ *                 example: 4
+ *               zona_id:
+ *                 type: integer
+ *                 example: 10
  *     responses:
  *       201:
- *         description: Usuario COMUNIDAD creado correctamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
- *                   example: Usuario COMUNIDAD creado correctamente
- *                 Usuario_defecto:
- *                   type: string
- *                   example: mrodriguez
- *                 observacion:
- *                   type: string
- *                   example: La contraseña por defecto es el número de carnet de identidad (CI)
+ *         description: Usuario COMUNIDAD creado correctamente con Usuario_defecto
  *       400:
- *         description: Faltan campos requeridos o correo duplicado
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
- *                   example: "Faltan campos obligatorios: nombres, apellidop, carnet_ci"
+ *         description: Faltan campos o correo duplicado
  *       500:
- *         description: Error interno al registrar
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 mensaje:
- *                   type: string
- *                   example: Error al registrar usuario COMUNIDAD
- *                 error:
- *                   type: string
- *                   example: Descripción del error
+ *         description: Error al registrar usuario COMUNIDAD
  */
 router.post('/registro-comunidad', registroComunidad);
 
