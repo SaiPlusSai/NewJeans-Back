@@ -19,6 +19,9 @@ export const tipoEnumMap = {
   resolucion_municipal: "resolucion_municipal",
   "resolucion municipal": "resolucion_municipal",
   "resolución municipal": "resolucion_municipal",
+  "resolución municipal": "Resolucion_Municipal",
+  "resolución municipal": 'Resolución_Municipal',
+
 
   programa: "programa",
   "programa social": "programa",

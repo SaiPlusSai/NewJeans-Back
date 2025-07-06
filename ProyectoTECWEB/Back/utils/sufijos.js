@@ -19,6 +19,8 @@ export const sufijosPorTipo = {
   resolucion_municipal: "RSM",
   "resolucion municipal": "RSM",
   "resolución municipal": "RSM",
+  "resolución municipal": "Resolucion_Municipal",
+  "resolución municipal": 'Resolución_Municipal',
 
   programa: "PRG",
   "programa social": "PRG",
