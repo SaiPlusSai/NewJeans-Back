@@ -1,5 +1,11 @@
 import express from 'express';
-import { login, register, perfil,registroGoogle,actualizarUsuarioGeneral,registroComunidad,cambiarContrasenia} from '../controllers/usuariosController.js';
+import { login, 
+    register, 
+    perfil,
+    registroGoogle,
+    actualizarUsuarioGeneral,
+    registroComunidad,
+    cambiarContrasenia} from '../controllers/usuariosController.js';
 import { verificarToken } from '../middleware/auth.js';
 
 const router = express.Router();

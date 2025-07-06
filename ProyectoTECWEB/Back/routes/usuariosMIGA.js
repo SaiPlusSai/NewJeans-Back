@@ -186,6 +186,36 @@ router.put('/:id/rol', verificarToken, soloMIGA, actualizarRolUsuario);
 router.put('/:id/eliminar', verificarToken, soloMIGA, eliminarUsuario);
 /**
  * @swagger
+ * /api/usuarios-miga/{id}/restaurar:
+ *   put:
+ *     summary: Restaurar un usuario eliminado lógicamente
+ *     tags: [Usuarios MIGA]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del usuario a restaurar
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Usuario restaurado correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mensaje:
+ *                   type: string
+ *                   example: Usuario restaurado correctamente
+ *       500:
+ *         description: Error al restaurar usuario
+ */
+router.put('/:id/restaurar', verificarToken, soloMIGA, restaurarUsuarioEliminado);
+/**
+ * @swagger
  * /api/usuarios-miga/eliminados:
  *   get:
  *     summary: Listar usuarios eliminados
