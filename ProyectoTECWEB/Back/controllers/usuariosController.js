@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { OAuth2Client } from 'google-auth-library';
 import db from '../db.js';
 import { generarUsuarioDefecto } from '../utils/usuario_defecto.js';
-import { crearUsuario, buscarPorCorreo,editarUsuario } from '../models/usuariosModel.js';
+import { crearUsuario, buscarPorCorreo, editarUsuario } from '../models/usuariosModel.js';
 
 export async function register(req, res) {
   try {
@@ -28,6 +28,7 @@ export async function register(req, res) {
     res.status(500).json({ mensaje: 'Error al registrar usuario' });
   }
 }
+
 export async function login(req, res) {
   try {
     const loginInput = req.body.login || req.body.correo || req.body.usuario_defecto;
@@ -72,8 +73,6 @@ export async function login(req, res) {
     res.status(500).json({ mensaje: 'Error al iniciar sesión' });
   }
 }
-
-
 
 export function perfil(req, res) {
   res.json({
@@ -130,13 +129,14 @@ export async function actualizarUsuarioGeneral(req, res) {
     const { id } = req.params;
     const datos = req.body;
 
-    
+    // No permitir cambios en campos sensibles como el rol o el estado eliminado
     if ('rol' in datos || 'eliminado' in datos) {
       return res.status(403).json({ mensaje: 'No se permite modificar el rol ni el estado eliminado' });
     }
 
     await editarUsuario(id, datos);
     res.json({ mensaje: 'Usuario actualizado correctamente' });
+
   } catch (error) {
     console.error('Error al actualizar usuario:', error.message);
     res.status(500).json({ mensaje: 'Error al actualizar usuario' });
@@ -145,7 +145,7 @@ export async function actualizarUsuarioGeneral(req, res) {
 
 export async function registroComunidad(req, res) {
   try {
-    const { nombres, apellidop, apellidom, carnet_ci, correo = null } = req.body;
+    const { nombres, apellidop, apellidom, carnet_ci, correo = null, macrodistrito_id, ambitoactividad_id, zona_id } = req.body;
 
     if (!nombres || !apellidop || !carnet_ci) {
       return res.status(400).json({ mensaje: 'Faltan campos obligatorios: nombres, apellidop, carnet_ci' });
@@ -168,7 +168,10 @@ export async function registroComunidad(req, res) {
       correo,
       contraseña: hash,
       rol: 'COMUNIDAD',
-      Usuario_defecto
+      Usuario_defecto,
+      macrodistrito_id,
+      ambitoactividad_id,
+      zona_id
     });
 
     res.status(201).json({
@@ -182,6 +185,7 @@ export async function registroComunidad(req, res) {
     res.status(500).json({ mensaje: 'Error al registrar usuario COMUNIDAD', error: error.message });
   }
 }
+
 export async function cambiarContrasenia(req, res) {
   try {
     const { actual, nueva } = req.body;
