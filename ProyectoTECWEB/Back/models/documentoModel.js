@@ -54,27 +54,40 @@ export async function buscarDocumentoPorCodigo(codigo) {
 // Editar documento
 export async function editarDocumento(codigo, data) {
   const {
+    tipo,
+    fuente,
     descripcion,
     relevancia,
     anio,
     enlace,
     aplicacion_id,
     conceptos_cpe,
-    jerarquia
+    jerarquia,
+    creado_por
   } = data;
 
   const sql = `
     UPDATE documentos
-    SET descripcion = ?, relevancia = ?, anio = ?, enlace = ?,
-        aplicacion_id = ?, conceptos_cpe = ?, jerarquia = ?
+    SET tipo = ?, fuente = ?, descripcion = ?, relevancia = ?, anio = ?, 
+        enlace = ?, aplicacion_id = ?, conceptos_cpe = ?, jerarquia = ?, creado_por = ?
     WHERE codigo = ?
   `;
 
   await db.query(sql, [
-    descripcion, relevancia, anio, enlace,
-    aplicacion_id, conceptos_cpe, jerarquia, codigo
+    tipo,
+    fuente,
+    descripcion,
+    relevancia,
+    anio,
+    enlace,
+    aplicacion_id,
+    conceptos_cpe,
+    jerarquia,
+    creado_por,
+    codigo
   ]);
 }
+
 
 // Marcar como no vigente
 export async function marcarNoVigente(codigo) {
