@@ -27,7 +27,7 @@ import ambitoActividadRoutes from './routes/ambitoActividad.js';
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Backend de MIIGA corriendo con éxito en Railway');
+  res.send('Backend de MIIGA corriendo con éxito en Railway o Render :v, no c bro la verdad');
 });
 
 console.log('🌐 FRONTEND PERMITIDO:', process.env.URL_FRONTEND); // ✅ LOG ÚTIL
